@@ -1,660 +1,660 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Ray Marching</title><style>
-/* cspell:disable-file */
-/* webkit printing magic: print all background colors */
-html {
-	-webkit-print-color-adjust: exact;
-}
-* {
-	box-sizing: border-box;
-	-webkit-print-color-adjust: exact;
-}
+	/* cspell:disable-file */
+	/* webkit printing magic: print all background colors */
+	html {
+		-webkit-print-color-adjust: exact;
+	}
+	* {
+		box-sizing: border-box;
+		-webkit-print-color-adjust: exact;
+	}
 
-html,
-body {
-	margin: 0;
-	padding: 0;
-}
-@media only screen {
+	html,
 	body {
-		margin: 2em auto;
-		max-width: 900px;
-		color: rgb(55, 53, 47);
+		margin: 0;
+		padding: 0;
 	}
-}
+	@media only screen {
+		body {
+			margin: 2em auto;
+			max-width: 900px;
+			color: rgb(55, 53, 47);
+		}
+	}
 
-body {
-	line-height: 1.5;
-	white-space: pre-wrap;
-}
+	body {
+		line-height: 1.5;
+		white-space: pre-wrap;
+	}
 
-a,
-a.visited {
-	color: inherit;
-	text-decoration: underline;
-}
+	a,
+	a.visited {
+		color: inherit;
+		text-decoration: underline;
+	}
 
-.pdf-relative-link-path {
-	font-size: 80%;
-	color: #444;
-}
+	.pdf-relative-link-path {
+		font-size: 80%;
+		color: #444;
+	}
 
-h1,
-h2,
-h3 {
-	letter-spacing: -0.01em;
-	line-height: 1.2;
-	font-weight: 600;
-	margin-bottom: 0;
-}
+	h1,
+	h2,
+	h3 {
+		letter-spacing: -0.01em;
+		line-height: 1.2;
+		font-weight: 600;
+		margin-bottom: 0;
+	}
 
-.page-title {
-	font-size: 2.5rem;
-	font-weight: 700;
-	margin-top: 0;
-	margin-bottom: 0.75em;
-}
+	.page-title {
+		font-size: 2.5rem;
+		font-weight: 700;
+		margin-top: 0;
+		margin-bottom: 0.75em;
+	}
 
-h1 {
-	font-size: 1.875rem;
-	margin-top: 1.875rem;
-}
+	h1 {
+		font-size: 1.875rem;
+		margin-top: 1.875rem;
+	}
 
-h2 {
-	font-size: 1.5rem;
-	margin-top: 1.5rem;
-}
+	h2 {
+		font-size: 1.5rem;
+		margin-top: 1.5rem;
+	}
 
-h3 {
-	font-size: 1.25rem;
-	margin-top: 1.25rem;
-}
+	h3 {
+		font-size: 1.25rem;
+		margin-top: 1.25rem;
+	}
 
-.source {
-	border: 1px solid #ddd;
-	border-radius: 3px;
-	padding: 1.5em;
-	word-break: break-all;
-}
+	.source {
+		border: 1px solid #ddd;
+		border-radius: 3px;
+		padding: 1.5em;
+		word-break: break-all;
+	}
 
-.callout {
-	border-radius: 3px;
-	padding: 1rem;
-}
+	.callout {
+		border-radius: 3px;
+		padding: 1rem;
+	}
 
-figure {
-	margin: 1.25em 0;
-	page-break-inside: avoid;
-}
+	figure {
+		margin: 1.25em 0;
+		page-break-inside: avoid;
+	}
 
-figcaption {
-	opacity: 0.5;
-	font-size: 85%;
-	margin-top: 0.5em;
-}
+	figcaption {
+		opacity: 0.5;
+		font-size: 85%;
+		margin-top: 0.5em;
+	}
 
-mark {
-	background-color: transparent;
-}
+	mark {
+		background-color: transparent;
+	}
 
-.indented {
-	padding-left: 1.5em;
-}
+	.indented {
+		padding-left: 1.5em;
+	}
 
-hr {
-	background: transparent;
-	display: block;
-	width: 100%;
-	height: 1px;
-	visibility: visible;
-	border: none;
-	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
-}
+	hr {
+		background: transparent;
+		display: block;
+		width: 100%;
+		height: 1px;
+		visibility: visible;
+		border: none;
+		border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+	}
 
-img {
-	max-width: 100%;
-}
-
-@media only print {
 	img {
-		max-height: 100vh;
-		object-fit: contain;
+		max-width: 100%;
 	}
-}
-
-@page {
-	margin: 1in;
-}
-
-.collection-content {
-	font-size: 0.875rem;
-}
-
-.column-list {
-	display: flex;
-	justify-content: space-between;
-}
-
-.column {
-	padding: 0 1em;
-}
-
-.column:first-child {
-	padding-left: 0;
-}
-
-.column:last-child {
-	padding-right: 0;
-}
-
-.table_of_contents-item {
-	display: block;
-	font-size: 0.875rem;
-	line-height: 1.3;
-	padding: 0.125rem;
-}
-
-.table_of_contents-indent-1 {
-	margin-left: 1.5rem;
-}
-
-.table_of_contents-indent-2 {
-	margin-left: 3rem;
-}
-
-.table_of_contents-indent-3 {
-	margin-left: 4.5rem;
-}
-
-.table_of_contents-link {
-	text-decoration: none;
-	opacity: 0.7;
-	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
-}
-
-table,
-th,
-td {
-	border: 1px solid rgba(55, 53, 47, 0.09);
-	border-collapse: collapse;
-}
-
-table {
-	border-left: none;
-	border-right: none;
-}
-
-th,
-td {
-	font-weight: normal;
-	padding: 0.25em 0.5em;
-	line-height: 1.5;
-	min-height: 1.5em;
-	text-align: left;
-}
-
-th {
-	color: rgba(55, 53, 47, 0.6);
-}
-
-ol,
-ul {
-	margin: 0;
-	margin-block-start: 0.6em;
-	margin-block-end: 0.6em;
-}
-
-li > ol:first-child,
-li > ul:first-child {
-	margin-block-start: 0.6em;
-}
-
-ul > li {
-	list-style: disc;
-}
-
-ul.to-do-list {
-	text-indent: -1.7em;
-}
-
-ul.to-do-list > li {
-	list-style: none;
-}
-
-.to-do-children-checked {
-	text-decoration: line-through;
-	opacity: 0.375;
-}
-
-ul.toggle > li {
-	list-style: none;
-}
-
-ul {
-	padding-inline-start: 1.7em;
-}
-
-ul > li {
-	padding-left: 0.1em;
-}
-
-ol {
-	padding-inline-start: 1.6em;
-}
-
-ol > li {
-	padding-left: 0.2em;
-}
-
-.mono ol {
-	padding-inline-start: 2em;
-}
-
-.mono ol > li {
-	text-indent: -0.4em;
-}
-
-.toggle {
-	padding-inline-start: 0em;
-	list-style-type: none;
-}
-
-/* Indent toggle children */
-.toggle > li > details {
-	padding-left: 1.7em;
-}
-
-.toggle > li > details > summary {
-	margin-left: -1.1em;
-}
-
-.selected-value {
-	display: inline-block;
-	padding: 0 0.5em;
-	background: rgba(206, 205, 202, 0.5);
-	border-radius: 3px;
-	margin-right: 0.5em;
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
-	white-space: nowrap;
-}
-
-.collection-title {
-	display: inline-block;
-	margin-right: 1em;
-}
-
-.simple-table {
-	margin-top: 1em;
-	font-size: 0.875rem;
-}
-
-.simple-table-header {
-	background: rgb(247, 246, 243);
-	color: black;
-	font-weight: 500;
-}
-
-time {
-	opacity: 0.5;
-}
-
-.icon {
-	display: inline-block;
-	max-width: 1.2em;
-	max-height: 1.2em;
-	text-decoration: none;
-	vertical-align: text-bottom;
-	margin-right: 0.5em;
-}
-
-img.icon {
-	border-radius: 3px;
-}
-
-.user-icon {
-	width: 1.5em;
-	height: 1.5em;
-	border-radius: 100%;
-	margin-right: 0.5rem;
-}
-
-.user-icon-inner {
-	font-size: 0.8em;
-}
-
-.text-icon {
-	border: 1px solid #000;
-	text-align: center;
-}
-
-.page-cover-image {
-	display: block;
-	object-fit: cover;
-	width: 100%;
-	max-height: 30vh;
-}
-
-.page-header-icon {
-	font-size: 3rem;
-	margin-bottom: 1rem;
-}
-
-.page-header-icon-with-cover {
-	margin-top: -0.72em;
-	margin-left: 0.07em;
-}
-
-.page-header-icon img {
-	border-radius: 3px;
-}
-
-.link-to-page {
-	margin: 1em 0;
-	padding: 0;
-	border: none;
-	font-weight: 500;
-}
-
-p > .user {
-	opacity: 0.5;
-}
-
-td > .user,
-td > time {
-	white-space: nowrap;
-}
-
-input[type="checkbox"] {
-	transform: scale(1.5);
-	margin-right: 0.6em;
-	vertical-align: middle;
-}
-
-p {
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
-}
-
-.image {
-	border: none;
-	margin: 1.5em 0;
-	padding: 0;
-	border-radius: 0;
-	text-align: center;
-}
-
-.code,
-code {
-	background: rgba(135, 131, 120, 0.15);
-	border-radius: 3px;
-	padding: 0.2em 0.4em;
-	border-radius: 3px;
-	font-size: 85%;
-	tab-size: 2;
-}
-
-code {
-	color: #eb5757;
-}
-
-.code {
-	padding: 1.5em 1em;
-}
-
-.code-wrap {
-	white-space: pre-wrap;
-	word-break: break-all;
-}
-
-.code > code {
-	background: none;
-	padding: 0;
-	font-size: 100%;
-	color: inherit;
-}
-
-blockquote {
-	font-size: 1.25em;
-	margin: 1em 0;
-	padding-left: 1em;
-	border-left: 3px solid rgb(55, 53, 47);
-}
-
-.bookmark {
-	text-decoration: none;
-	max-height: 8em;
-	padding: 0;
-	display: flex;
-	width: 100%;
-	align-items: stretch;
-}
-
-.bookmark-title {
-	font-size: 0.85em;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	height: 1.75em;
-	white-space: nowrap;
-}
-
-.bookmark-text {
-	display: flex;
-	flex-direction: column;
-}
-
-.bookmark-info {
-	flex: 4 1 180px;
-	padding: 12px 14px 14px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-
-.bookmark-image {
-	width: 33%;
-	flex: 1 1 180px;
-	display: block;
-	position: relative;
-	object-fit: cover;
-	border-radius: 1px;
-}
-
-.bookmark-description {
-	color: rgba(55, 53, 47, 0.6);
-	font-size: 0.75em;
-	overflow: hidden;
-	max-height: 4.5em;
-	word-break: break-word;
-}
-
-.bookmark-href {
-	font-size: 0.75em;
-	margin-top: 0.25em;
-}
-
-.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
-.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
-.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
-.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
-.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
-.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
-.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
-.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
-.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
-.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
-.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
-.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
-.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
-.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
-.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
-.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
-.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
-.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
-.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
-.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
-.highlight-default {
-	color: rgba(55, 53, 47, 1);
-}
-.highlight-gray {
-	color: rgba(120, 119, 116, 1);
-	fill: rgba(120, 119, 116, 1);
-}
-.highlight-brown {
-	color: rgba(159, 107, 83, 1);
-	fill: rgba(159, 107, 83, 1);
-}
-.highlight-orange {
-	color: rgba(217, 115, 13, 1);
-	fill: rgba(217, 115, 13, 1);
-}
-.highlight-yellow {
-	color: rgba(203, 145, 47, 1);
-	fill: rgba(203, 145, 47, 1);
-}
-.highlight-teal {
-	color: rgba(68, 131, 97, 1);
-	fill: rgba(68, 131, 97, 1);
-}
-.highlight-blue {
-	color: rgba(51, 126, 169, 1);
-	fill: rgba(51, 126, 169, 1);
-}
-.highlight-purple {
-	color: rgba(144, 101, 176, 1);
-	fill: rgba(144, 101, 176, 1);
-}
-.highlight-pink {
-	color: rgba(193, 76, 138, 1);
-	fill: rgba(193, 76, 138, 1);
-}
-.highlight-red {
-	color: rgba(212, 76, 71, 1);
-	fill: rgba(212, 76, 71, 1);
-}
-.highlight-gray_background {
-	background: rgba(241, 241, 239, 1);
-}
-.highlight-brown_background {
-	background: rgba(244, 238, 238, 1);
-}
-.highlight-orange_background {
-	background: rgba(251, 236, 221, 1);
-}
-.highlight-yellow_background {
-	background: rgba(251, 243, 219, 1);
-}
-.highlight-teal_background {
-	background: rgba(237, 243, 236, 1);
-}
-.highlight-blue_background {
-	background: rgba(231, 243, 248, 1);
-}
-.highlight-purple_background {
-	background: rgba(244, 240, 247, 0.8);
-}
-.highlight-pink_background {
-	background: rgba(249, 238, 243, 0.8);
-}
-.highlight-red_background {
-	background: rgba(253, 235, 236, 1);
-}
-.block-color-default {
-	color: inherit;
-	fill: inherit;
-}
-.block-color-gray {
-	color: rgba(120, 119, 116, 1);
-	fill: rgba(120, 119, 116, 1);
-}
-.block-color-brown {
-	color: rgba(159, 107, 83, 1);
-	fill: rgba(159, 107, 83, 1);
-}
-.block-color-orange {
-	color: rgba(217, 115, 13, 1);
-	fill: rgba(217, 115, 13, 1);
-}
-.block-color-yellow {
-	color: rgba(203, 145, 47, 1);
-	fill: rgba(203, 145, 47, 1);
-}
-.block-color-teal {
-	color: rgba(68, 131, 97, 1);
-	fill: rgba(68, 131, 97, 1);
-}
-.block-color-blue {
-	color: rgba(51, 126, 169, 1);
-	fill: rgba(51, 126, 169, 1);
-}
-.block-color-purple {
-	color: rgba(144, 101, 176, 1);
-	fill: rgba(144, 101, 176, 1);
-}
-.block-color-pink {
-	color: rgba(193, 76, 138, 1);
-	fill: rgba(193, 76, 138, 1);
-}
-.block-color-red {
-	color: rgba(212, 76, 71, 1);
-	fill: rgba(212, 76, 71, 1);
-}
-.block-color-gray_background {
-	background: rgba(241, 241, 239, 1);
-}
-.block-color-brown_background {
-	background: rgba(244, 238, 238, 1);
-}
-.block-color-orange_background {
-	background: rgba(251, 236, 221, 1);
-}
-.block-color-yellow_background {
-	background: rgba(251, 243, 219, 1);
-}
-.block-color-teal_background {
-	background: rgba(237, 243, 236, 1);
-}
-.block-color-blue_background {
-	background: rgba(231, 243, 248, 1);
-}
-.block-color-purple_background {
-	background: rgba(244, 240, 247, 0.8);
-}
-.block-color-pink_background {
-	background: rgba(249, 238, 243, 0.8);
-}
-.block-color-red_background {
-	background: rgba(253, 235, 236, 1);
-}
-.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
-.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
-.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
-.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
-.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
-.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
-.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
-.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
-.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
-.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
-
-.checkbox {
-	display: inline-flex;
-	vertical-align: text-bottom;
-	width: 16;
-	height: 16;
-	background-size: 16px;
-	margin-left: 2px;
-	margin-right: 5px;
-}
-
-.checkbox-on {
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
-}
-
-.checkbox-off {
-	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
-}
-	
-</style></head><body><article id="5cd9a1b0-775c-4b4f-b71b-6d66673fd7c1" class="page sans"><header><h1 class="page-title">Ray Marching</h1></header><div class="page-body"><p id="269db465-01ea-4a38-8d10-bd30efd236a0" class="">Tyler Bovenzi 2022</p><h1 id="1d89f1bd-d8db-4cc7-9e29-fc1c21f8a69d" class="">Introduction</h1><h3 id="b59a72d4-2968-4038-9eda-963acd8615af" class="">Ray Marching </h3><p id="85f829ed-ba60-4eb8-a817-3b42c552c0bb" class="">
+
+	@media only print {
+		img {
+			max-height: 100vh;
+			object-fit: contain;
+		}
+	}
+
+	@page {
+		margin: 1in;
+	}
+
+	.collection-content {
+		font-size: 0.875rem;
+	}
+
+	.column-list {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.column {
+		padding: 0 1em;
+	}
+
+	.column:first-child {
+		padding-left: 0;
+	}
+
+	.column:last-child {
+		padding-right: 0;
+	}
+
+	.table_of_contents-item {
+		display: block;
+		font-size: 0.875rem;
+		line-height: 1.3;
+		padding: 0.125rem;
+	}
+
+	.table_of_contents-indent-1 {
+		margin-left: 1.5rem;
+	}
+
+	.table_of_contents-indent-2 {
+		margin-left: 3rem;
+	}
+
+	.table_of_contents-indent-3 {
+		margin-left: 4.5rem;
+	}
+
+	.table_of_contents-link {
+		text-decoration: none;
+		opacity: 0.7;
+		border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+	}
+
+	table,
+	th,
+	td {
+		border: 1px solid rgba(55, 53, 47, 0.09);
+		border-collapse: collapse;
+	}
+
+	table {
+		border-left: none;
+		border-right: none;
+	}
+
+	th,
+	td {
+		font-weight: normal;
+		padding: 0.25em 0.5em;
+		line-height: 1.5;
+		min-height: 1.5em;
+		text-align: left;
+	}
+
+	th {
+		color: rgba(55, 53, 47, 0.6);
+	}
+
+	ol,
+	ul {
+		margin: 0;
+		margin-block-start: 0.6em;
+		margin-block-end: 0.6em;
+	}
+
+	li > ol:first-child,
+	li > ul:first-child {
+		margin-block-start: 0.6em;
+	}
+
+	ul > li {
+		list-style: disc;
+	}
+
+	ul.to-do-list {
+		text-indent: -1.7em;
+	}
+
+	ul.to-do-list > li {
+		list-style: none;
+	}
+
+	.to-do-children-checked {
+		text-decoration: line-through;
+		opacity: 0.375;
+	}
+
+	ul.toggle > li {
+		list-style: none;
+	}
+
+	ul {
+		padding-inline-start: 1.7em;
+	}
+
+	ul > li {
+		padding-left: 0.1em;
+	}
+
+	ol {
+		padding-inline-start: 1.6em;
+	}
+
+	ol > li {
+		padding-left: 0.2em;
+	}
+
+	.mono ol {
+		padding-inline-start: 2em;
+	}
+
+	.mono ol > li {
+		text-indent: -0.4em;
+	}
+
+	.toggle {
+		padding-inline-start: 0em;
+		list-style-type: none;
+	}
+
+	/* Indent toggle children */
+	.toggle > li > details {
+		padding-left: 1.7em;
+	}
+
+	.toggle > li > details > summary {
+		margin-left: -1.1em;
+	}
+
+	.selected-value {
+		display: inline-block;
+		padding: 0 0.5em;
+		background: rgba(206, 205, 202, 0.5);
+		border-radius: 3px;
+		margin-right: 0.5em;
+		margin-top: 0.3em;
+		margin-bottom: 0.3em;
+		white-space: nowrap;
+	}
+
+	.collection-title {
+		display: inline-block;
+		margin-right: 1em;
+	}
+
+	.simple-table {
+		margin-top: 1em;
+		font-size: 0.875rem;
+	}
+
+	.simple-table-header {
+		background: rgb(247, 246, 243);
+		color: black;
+		font-weight: 500;
+	}
+
+	time {
+		opacity: 0.5;
+	}
+
+	.icon {
+		display: inline-block;
+		max-width: 1.2em;
+		max-height: 1.2em;
+		text-decoration: none;
+		vertical-align: text-bottom;
+		margin-right: 0.5em;
+	}
+
+	img.icon {
+		border-radius: 3px;
+	}
+
+	.user-icon {
+		width: 1.5em;
+		height: 1.5em;
+		border-radius: 100%;
+		margin-right: 0.5rem;
+	}
+
+	.user-icon-inner {
+		font-size: 0.8em;
+	}
+
+	.text-icon {
+		border: 1px solid #000;
+		text-align: center;
+	}
+
+	.page-cover-image {
+		display: block;
+		object-fit: cover;
+		width: 100%;
+		max-height: 30vh;
+	}
+
+	.page-header-icon {
+		font-size: 3rem;
+		margin-bottom: 1rem;
+	}
+
+	.page-header-icon-with-cover {
+		margin-top: -0.72em;
+		margin-left: 0.07em;
+	}
+
+	.page-header-icon img {
+		border-radius: 3px;
+	}
+
+	.link-to-page {
+		margin: 1em 0;
+		padding: 0;
+		border: none;
+		font-weight: 500;
+	}
+
+	p > .user {
+		opacity: 0.5;
+	}
+
+	td > .user,
+	td > time {
+		white-space: nowrap;
+	}
+
+	input[type="checkbox"] {
+		transform: scale(1.5);
+		margin-right: 0.6em;
+		vertical-align: middle;
+	}
+
+	p {
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+	}
+
+	.image {
+		border: none;
+		margin: 1.5em 0;
+		padding: 0;
+		border-radius: 0;
+		text-align: center;
+	}
+
+	.code,
+	code {
+		background: rgba(135, 131, 120, 0.15);
+		border-radius: 3px;
+		padding: 0.2em 0.4em;
+		border-radius: 3px;
+		font-size: 85%;
+		tab-size: 2;
+	}
+
+	code {
+		color: #eb5757;
+	}
+
+	.code {
+		padding: 1.5em 1em;
+	}
+
+	.code-wrap {
+		white-space: pre-wrap;
+		word-break: break-all;
+	}
+
+	.code > code {
+		background: none;
+		padding: 0;
+		font-size: 100%;
+		color: inherit;
+	}
+
+	blockquote {
+		font-size: 1.25em;
+		margin: 1em 0;
+		padding-left: 1em;
+		border-left: 3px solid rgb(55, 53, 47);
+	}
+
+	.bookmark {
+		text-decoration: none;
+		max-height: 8em;
+		padding: 0;
+		display: flex;
+		width: 100%;
+		align-items: stretch;
+	}
+
+	.bookmark-title {
+		font-size: 0.85em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		height: 1.75em;
+		white-space: nowrap;
+	}
+
+	.bookmark-text {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.bookmark-info {
+		flex: 4 1 180px;
+		padding: 12px 14px 14px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.bookmark-image {
+		width: 33%;
+		flex: 1 1 180px;
+		display: block;
+		position: relative;
+		object-fit: cover;
+		border-radius: 1px;
+	}
+
+	.bookmark-description {
+		color: rgba(55, 53, 47, 0.6);
+		font-size: 0.75em;
+		overflow: hidden;
+		max-height: 4.5em;
+		word-break: break-word;
+	}
+
+	.bookmark-href {
+		font-size: 0.75em;
+		margin-top: 0.25em;
+	}
+
+	.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+	.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+	.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+	.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+	.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+	.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+	.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+	.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+	.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+	.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+	.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+	.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+	.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+	.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+	.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+	.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+	.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+	.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+	.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+	.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+	.highlight-default {
+		color: rgba(55, 53, 47, 1);
+	}
+	.highlight-gray {
+		color: rgba(120, 119, 116, 1);
+		fill: rgba(120, 119, 116, 1);
+	}
+	.highlight-brown {
+		color: rgba(159, 107, 83, 1);
+		fill: rgba(159, 107, 83, 1);
+	}
+	.highlight-orange {
+		color: rgba(217, 115, 13, 1);
+		fill: rgba(217, 115, 13, 1);
+	}
+	.highlight-yellow {
+		color: rgba(203, 145, 47, 1);
+		fill: rgba(203, 145, 47, 1);
+	}
+	.highlight-teal {
+		color: rgba(68, 131, 97, 1);
+		fill: rgba(68, 131, 97, 1);
+	}
+	.highlight-blue {
+		color: rgba(51, 126, 169, 1);
+		fill: rgba(51, 126, 169, 1);
+	}
+	.highlight-purple {
+		color: rgba(144, 101, 176, 1);
+		fill: rgba(144, 101, 176, 1);
+	}
+	.highlight-pink {
+		color: rgba(193, 76, 138, 1);
+		fill: rgba(193, 76, 138, 1);
+	}
+	.highlight-red {
+		color: rgba(212, 76, 71, 1);
+		fill: rgba(212, 76, 71, 1);
+	}
+	.highlight-gray_background {
+		background: rgba(241, 241, 239, 1);
+	}
+	.highlight-brown_background {
+		background: rgba(244, 238, 238, 1);
+	}
+	.highlight-orange_background {
+		background: rgba(251, 236, 221, 1);
+	}
+	.highlight-yellow_background {
+		background: rgba(251, 243, 219, 1);
+	}
+	.highlight-teal_background {
+		background: rgba(237, 243, 236, 1);
+	}
+	.highlight-blue_background {
+		background: rgba(231, 243, 248, 1);
+	}
+	.highlight-purple_background {
+		background: rgba(244, 240, 247, 0.8);
+	}
+	.highlight-pink_background {
+		background: rgba(249, 238, 243, 0.8);
+	}
+	.highlight-red_background {
+		background: rgba(253, 235, 236, 1);
+	}
+	.block-color-default {
+		color: inherit;
+		fill: inherit;
+	}
+	.block-color-gray {
+		color: rgba(120, 119, 116, 1);
+		fill: rgba(120, 119, 116, 1);
+	}
+	.block-color-brown {
+		color: rgba(159, 107, 83, 1);
+		fill: rgba(159, 107, 83, 1);
+	}
+	.block-color-orange {
+		color: rgba(217, 115, 13, 1);
+		fill: rgba(217, 115, 13, 1);
+	}
+	.block-color-yellow {
+		color: rgba(203, 145, 47, 1);
+		fill: rgba(203, 145, 47, 1);
+	}
+	.block-color-teal {
+		color: rgba(68, 131, 97, 1);
+		fill: rgba(68, 131, 97, 1);
+	}
+	.block-color-blue {
+		color: rgba(51, 126, 169, 1);
+		fill: rgba(51, 126, 169, 1);
+	}
+	.block-color-purple {
+		color: rgba(144, 101, 176, 1);
+		fill: rgba(144, 101, 176, 1);
+	}
+	.block-color-pink {
+		color: rgba(193, 76, 138, 1);
+		fill: rgba(193, 76, 138, 1);
+	}
+	.block-color-red {
+		color: rgba(212, 76, 71, 1);
+		fill: rgba(212, 76, 71, 1);
+	}
+	.block-color-gray_background {
+		background: rgba(241, 241, 239, 1);
+	}
+	.block-color-brown_background {
+		background: rgba(244, 238, 238, 1);
+	}
+	.block-color-orange_background {
+		background: rgba(251, 236, 221, 1);
+	}
+	.block-color-yellow_background {
+		background: rgba(251, 243, 219, 1);
+	}
+	.block-color-teal_background {
+		background: rgba(237, 243, 236, 1);
+	}
+	.block-color-blue_background {
+		background: rgba(231, 243, 248, 1);
+	}
+	.block-color-purple_background {
+		background: rgba(244, 240, 247, 0.8);
+	}
+	.block-color-pink_background {
+		background: rgba(249, 238, 243, 0.8);
+	}
+	.block-color-red_background {
+		background: rgba(253, 235, 236, 1);
+	}
+	.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+	.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+	.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+	.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+	.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+	.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+	.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+	.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+	.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+	.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+	.checkbox {
+		display: inline-flex;
+		vertical-align: text-bottom;
+		width: 16;
+		height: 16;
+		background-size: 16px;
+		margin-left: 2px;
+		margin-right: 5px;
+	}
+
+	.checkbox-on {
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+	}
+
+	.checkbox-off {
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+	}
+
+</style></head><body><article id="5cd9a1b0-775c-4b4f-b71b-6d66673fd7c1" class="page sans"><header><h1 class="page-title">Ray Marching</h1></header><div class="page-body"><p id="269db465-01ea-4a38-8d10-bd30efd236a0" class="">Tyler Bovenzi 2022</p><p id="770d89eb-9dcd-40c2-92b1-11c3bb9e08a2" class=""><a href="https://github.com/TylerBovenzi/471FinalProject">Github</a></p><h1 id="1d89f1bd-d8db-4cc7-9e29-fc1c21f8a69d" class="">Introduction</h1><h3 id="b59a72d4-2968-4038-9eda-963acd8615af" class="">Ray Marching </h3><p id="85f829ed-ba60-4eb8-a817-3b42c552c0bb" class="">
 </p><p id="dcacbe62-7577-4f57-a959-b7c17dfdc390" class="">Ray Marching is a very different rendering technique that does not use polygons, billboards, or meshes. Rather, it uses signed distance functions to calculate the color of each pixel mathematically.  While computationally expensive relative to traditional rendering techniques, it does offer some advantages and interesting properties.</p><p id="9f978522-3e52-4d04-baac-29a5a1ee17e5" class="">
 </p><h3 id="eea262c1-9ba0-4dd9-94dc-9ea7c966e3d3" class="">Vertex and Fragment Shader</h3><p id="d0c48353-9dad-4eb3-8d07-1adddd71cfc4" class="">
 </p><p id="9669da5c-6301-485f-a05f-200134e0bf3c" class="">Ray Marching does not use VAO’s or any type of polygons. In fact, my implementation only used the vertex shader to create a rectangle that fills the window. Everything is done in the <strong>Fragment Shader</strong> where each pixel’s color is calculated independently. </p><p id="89366cd2-9474-4172-b602-b2366edb4156" class="">
@@ -673,7 +673,67 @@ blockquote {
 	float z = res.y / tan(radians(fieldOfView) / 2.0);
 	return normalize(vec3(xy, -z));
 }</code></pre><p id="f5a88709-d57b-49bc-9283-2dd94a3fa45f" class="">
-</p><p id="733a54c0-7337-42ea-9269-ae072faee092" class="">
-</p><p id="43f0eb54-8085-4cb7-9a81-b70b74be6ed3" class="">
-</p><h1 id="3556df7a-3049-416c-9d6c-1a34d39be641" class="">Sources:</h1><ol type="1" id="3dfcb2a4-9c5a-454e-b427-1bf3c13a81cb" class="numbered-list" start="1"><li>“Adrian&#x27;s Soapbox.” <em>Raymarching Distance Fields: Concepts and Implementation in Unity</em>, https://adrianb.io/2016/10/01/raymarching.html. </li></ol><ol type="1" id="48d085d9-3750-4b60-bafd-358f52200249" class="numbered-list" start="2"><li>“Ray Marching.” <em>Michael Walczyk</em>, https://michaelwalczyk.com/blog-ray-marching.html. </li></ol><p id="79739628-2c16-41aa-aaaa-8a67a48ee46c" class="">
+</p><h3 id="67d5802f-c2cf-4591-ac31-3f2163685303" class="">Distance Shading</h3><p id="4c8a81c4-6120-4351-beb4-6f734c1ad77d" class="">
+</p><p id="6a135cad-78fc-4ac2-aa6a-abf877a19b75" class="">Once the Ray Marching loop is up and running, we can color the scene based on the distance to the object. In the image below, I calculate the distance for every pixel, and if its under a threshold, I color it blue. With a sphere and cube, this creates a basic scene where one can make out the shape of the objects without any shading or shadows. </p><p id="e3a5e890-b9da-4055-a4c6-11885a493450" class="">
+</p><figure id="d6f438fa-dc11-48c0-a67e-aca3ac6e3261" class="image"><a href="../RayMarch/Assets/hello_triangle_3_16_2022_12_17_21_PM.png"><img style="width:432px" src="../RayMarch/Assets/hello_triangle_3_16_2022_12_17_21_PM.png"/></a></figure><p id="fd3b678e-3431-478a-80a7-59fb65dec4ff" class="">
+</p><p id="1f1c4230-280e-4b89-b306-53846a0f8700" class="">
+</p><h3 id="94143e87-4040-4c92-8d39-dbf42b34378d" class="">Diffuse Shading</h3><p id="50283887-de0a-4172-8c0e-5e520b4826e4" class="">
+</p><p id="dbf6a1c8-8deb-4bb7-9f1a-08f6b9f1478e" class="">With the position of the camera, angle of the ray direction, and distance, its easy to calculate the position of every ray collision. </p><p id="b40995a0-f822-40dc-87d6-3564db08589a" class="">
+</p><p id="21df87d0-2567-47dd-ba9d-45870831957f" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi mathvariant="normal">.</mi><mi>x</mi><mi>y</mi><mi>z</mi><mo>=</mo><mi>R</mi><mi>a</mi><mi>y</mi><mi>O</mi><mi>r</mi><mi>i</mi><mi>g</mi><mi>i</mi><mi>n</mi><mi mathvariant="normal">.</mi><mi>x</mi><mi>y</mi><mi>z</mi><mo>+</mo><mo stretchy="false">(</mo><mi>R</mi><mi>a</mi><mi>y</mi><mi>D</mi><mi>i</mi><mi>r</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi mathvariant="normal">.</mi><mi>x</mi><mi>y</mi><mi>z</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>D</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>c</mi><mi>e</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Position.xyz = RayOrigin.xyz + (RayDirection.xyz)(Distance)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">os</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord">.</span><span class="mord mathnormal">x</span><span class="mord mathnormal" style="margin-right:0.04398em;">yz</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">in</span><span class="mord">.</span><span class="mord mathnormal">x</span><span class="mord mathnormal" style="margin-right:0.04398em;">yz</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">yD</span><span class="mord mathnormal">i</span><span class="mord mathnormal">rec</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord">.</span><span class="mord mathnormal">x</span><span class="mord mathnormal" style="margin-right:0.04398em;">yz</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">an</span><span class="mord mathnormal">ce</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></p><p id="f97121ab-c347-4f3e-8fc9-8cd798e27682" class="">
+</p><p id="d737aa55-56f4-4342-9278-31ac2f6bd845" class="">It is also possible to obtain the normal vector from a surface by calculating the distance to points offset by a small amount. Consider the following code:</p><p id="483ee310-2e57-4884-b764-f5dc91aea77b" class="">
+</p><pre id="68a22a7d-2dc7-4297-b874-eb5c64836270" class="code"><code>vec3 GetNormal(vec3 position)
+{
+	float distance = GetDist(p);
+	vec2 epsilon = vec2(.01,0);
+	vec3 n = distance - vec3(
+		GetDist(position-epsilon.xyy), //X Component
+		GetDist(position-epsilon.yxy), //Y Component
+		GetDist(position-epsilon.yyx)  //Z Component
+	);
+
+	return normalize(n);
+}</code></pre><p id="3d2d75fe-d840-45a3-b82e-bb429948c1c4" class="">
+</p><p id="f6dc3103-67d6-47bb-b483-61e8dfd4eb23" class="">With surface normals, and lighting positions, we can add simple diffuse lighting to the scene:</p><p id="54237239-8030-491e-8769-7ffcf10e7ebd" class="">
+</p><figure id="5ae12c6e-9332-48df-ae6f-390ea1777c63" class="image"><a href="../RayMarch/Assets/hello_triangle_3_16_2022_12_15_25_PM.png"><img style="width:528px" src="../RayMarch/Assets/hello_triangle_3_16_2022_12_15_25_PM.png"/></a></figure><p id="f771c426-bd99-43ab-aba4-e3c39e339ce3" class="">
+</p><p id="bdf779fe-a3bc-4942-b31f-235b50cc66a8" class="">
+</p><h3 id="391d80e7-d838-4d00-88d8-7335114ef94b" class="">Shadows</h3><p id="c1016693-fc35-4460-88d8-85ad101349f0" class="">
+</p><p id="68ec4f65-27dc-48ca-b72a-a4dd9320d758" class="">Once we have the position of every visible point on a surface, we can implement shadows by ray marching for a second time. This time, instead of marching a ray from the camera to the object, we instead march from the object towards the light source. If this ray collides with another object before hitting a light source, we know there is another object blocking the light and can therefore draw a shadow for that pixel. Note that this requires more performance since it adds more ray marching steps.</p><p id="fd766fa4-a5a9-47e8-b847-99e2f7ec8a80" class="">
+</p><figure id="63173f02-7a3c-4c67-8ac3-26285b6dc510" class="image"><a href="../RayMarch/Assets/shadow.gif"><img style="width:600px" src="../RayMarch/Assets/shadow.gif"/></a></figure><p id="56be1268-f943-4c9e-af1c-b4fd48fc2c1d" class="">
+</p><p id="738daabf-c8d2-4abb-8e8b-2f0642048644" class="">
+</p><h3 id="63b810d5-e91c-4cb3-9e59-960d3e20a4be" class="">Outlines</h3><p id="9bbab235-2314-40e2-bd8a-f72aeb0be291" class="">
+</p><p id="056cab3e-6692-47ea-942d-b55d2db6fb3e" class="">Unlike shadows, which are somewhat computationally intensive, outlines come effectively <mark class="highlight-teal">free</mark> with the ray marching loop. The distance the ray marches is inversely proportional to the distance from the object. In other words, since the distance of each iteration decreases near the object, there are more iterations closer to an object’s surface. If we count the total number of iterations for each pixel, it yields a nice outline shading effect. Note that for the image below, color was set to zero if the ray actually hits an object. </p><p id="474af568-159a-4d06-ad34-c452a780169b" class="">Since ray iterations are the bulk of the computational work done, this also shows the performance required for each pixel, where darker pixels are less expensive. </p><p id="b119dc5b-d31b-4cc3-b098-0f0e65eed479" class="">
+</p><figure id="bd24ee14-10a6-4046-b8bd-b67a12d46d5b" class="image"><a href="../RayMarch/Assets/hello_triangle_3_16_2022_12_23_05_PM.png"><img style="width:576px" src="../RayMarch/Assets/hello_triangle_3_16_2022_12_23_05_PM.png"/></a></figure><p id="f502f6fe-5d15-4a38-a643-2967d67c4614" class="">
+</p><p id="b0fdad7f-2fa7-46ef-bc4e-d9a475c8c180" class="">
+</p><h3 id="86e1f9b1-98ae-4b08-85a6-e89889b572ad" class="">Smooth Minimum</h3><p id="f2ab9260-7029-4c77-8dc2-8ef282bdb110" class="">
+</p><p id="89fa5a0c-dc0e-4144-8ead-469155d92a45" class="">In an earlier section, I explained that the nearest distance can be found by taking the minimum from an array of distances to every object. This has the effect of distinct objects with clear cut boundaries. It’s also possible to blend objects together by smoothing out the minimum function. I won’t go into too much detail of how this works but there’s a great article by Inigo Quilez on <a href="https://www.iquilezles.org/www/articles/smin/smin.htm">his website</a>. In essence, the smooth min function takes a parameter that can be increased to modify the degree to which objects are blended together. If this parameter is negative, only the intersection between given objects is shown.</p><p id="d458865a-2d4e-49eb-9bfc-7ad10b604ce9" class="">
+</p><figure id="5c9bb7b8-f3df-4620-8f53-815adc03eea6" class="image"><a href="../RayMarch/Assets/ezgif-2-7cadaf5dcb.gif"><img style="width:624px" src="../RayMarch/Assets/ezgif-2-7cadaf5dcb.gif"/></a></figure><p id="43f0eb54-8085-4cb7-9a81-b70b74be6ed3" class="">
+</p><p id="b8167a88-727d-46e4-aa7f-a2da60d0f4cd" class="">
+</p><h3 id="db9e9762-1e2b-4eb8-974a-214b820fbb1b" class="">Distortion</h3><p id="8b012cb8-f5c3-401b-8e24-de633b5293c4" class="">
+</p><p id="cc7353bf-6a98-43e6-bf69-a43c50663ecd" class="">The SDF for an object provides a precise distance to the object’s surface. We can slightly distort this distance to gain an interesting shape at the expensive of precision and geometric uniformity. In the demonstration below, I add a sinusoidal noise pattern to the surface of the sphere.</p><p id="3b196a07-d7bd-4273-9334-fea73dddc24e" class="">
+</p><figure id="f8a164f2-bc66-4691-af5b-1df9b7af82ec" class="image"><a href="../RayMarch/Assets/ezgif-2-2b28d6d8ea.gif"><img style="width:624px" src="../RayMarch/Assets/ezgif-2-2b28d6d8ea.gif"/></a></figure><p id="3556df7a-3049-416c-9d6c-1a34d39be641" class="">
+</p><h3 id="77097bff-d11a-49fa-9209-a15afdaf0061" class="">Transparency</h3><p id="58de6b9c-c4af-4694-b7ea-683865838336" class="">
+</p><p id="cd8efdc5-17de-4cd2-b825-76f96bbaa821" class="">In all of the scenes so far, the ray marching stops once we hit an object, but what if we continued iterating the ray after reaching the object’s surface. </p><p id="1169583c-f166-40b8-8dfc-7040c655aa19" class="">
+</p><figure id="c56d172e-ac72-4fd0-bb5c-9367b4636116" class="image"><a href="../RayMarch/Assets/Untitled%201.png"><img style="width:685px" src="../RayMarch/Assets/Untitled%201.png"/></a><figcaption>[3]</figcaption></figure><p id="87138340-8f16-4ddf-bf52-84d825efa670" class="">
+</p><p id="ad655ea1-02fc-4bcc-988b-af9d8e9249ac" class="">Once the ray enters an object (the SDF is negative), we can increment through the object’s volume, keeping track of how many ray steps are within the media. </p><p id="750a7a56-f655-4b08-a32d-a8c41759f9d5" class="">
+</p><p id="b546c4f8-0994-42d3-a271-220cac9f3d60" class="">
+</p><figure id="031c90ef-76dc-459e-8ef2-23f55c470a35" class="image"><a href="../RayMarch/Assets/transparent.gif"><img style="width:576px" src="../RayMarch/Assets/transparent.gif"/></a></figure><p id="ba7b6a34-afb5-4fdf-b307-c113681fb8c0" class="">
+</p><h3 id="d332202a-4302-4939-bc84-c5d9ce060c85" class="">Terrain</h3><p id="9c936601-d14c-4f1e-a73c-19fdd3cbcfc1" class="">
+</p><p id="501e95cc-0b2e-4e45-82af-d08408db5904" class="">3D objects are great and have a lot of potential for interesting scenes. I also wanted to investigate terrain as it can be also be used to create immersive scenes. With terrain, we start with need some equation to determine the height for a given point. </p><p id="3a2eb2f5-8dca-44a5-a060-167d58fe7dac" class="">
+</p><p id="a5b1bbec-5d07-47af-ab85-53e2212c66d9" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>z</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Height = f(x,z)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">He</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">h</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></p><p id="497000c9-8484-43a5-a869-d9e62f044ab9" class="">
+</p><p id="103ae6b6-4749-4c96-88e0-86e097f71d01" class="">Using this equation, we can again step along a ray, stopping when we collide with the terrain. For each step, we know the height of the point in space. </p><p id="771c1500-2260-4f9a-a9bc-2c0448c2ac90" class="">
+</p><p id="c04552d3-2b85-49c8-aa11-fe13430b1ceb" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>=</mo><mi>R</mi><mi>a</mi><mi>y</mi><mi>O</mi><mi>r</mi><mi>i</mi><mi>g</mi><mi>i</mi><mi>n</mi><mo>+</mo><mo stretchy="false">(</mo><mi>R</mi><mi>a</mi><mi>y</mi><mi>D</mi><mi>i</mi><mi>r</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>D</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>c</mi><mi>e</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Position = RayOrigin + (RayDirection)(Distance)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">os</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">in</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">yD</span><span class="mord mathnormal">i</span><span class="mord mathnormal">rec</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">an</span><span class="mord mathnormal">ce</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></p><p id="b1e8eab3-f5c5-401c-acc6-b23ade0eb87c" class="">
+</p><p id="9063608d-57e5-4e2c-8106-a82618f3d913" class="">We can compare this to the height of the terrain to find the distance off the ground.</p><p id="99846af2-e83e-4b34-a5c5-edefe3a86c93" class="">
+</p><p id="46d25cf6-f299-4eb3-b779-08d8f0c4733e" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>G</mi><mi>L</mi><mo>=</mo><mi>P</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi mathvariant="normal">.</mi><mi>y</mi><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>P</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi mathvariant="normal">.</mi><mi>x</mi><mo separator="true">,</mo><mi>P</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi mathvariant="normal">.</mi><mi>z</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">HGL = Position.y - f(Position.x, Position.z)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mord mathnormal">G</span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">os</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">os</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord">.</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord mathnormal">os</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord">.</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></p><p id="7e499b06-9d42-4b0f-9f77-bb9d0cb93f88" class="">
+</p><p id="c472907a-8aca-42d6-adc5-9287f934ec15" class="">When this value is lower than a certain threshold, the ray has hit terrain. </p><p id="2ae09a7d-494e-4de7-ba1b-c868cedd3bc0" class="">
+</p><figure id="07db9956-5a84-4814-83de-861b09882ab6" class="image"><a href="../RayMarch/Assets/Untitled%202.png"><img style="width:576px" src="../RayMarch/Assets/Untitled%202.png"/></a><figcaption>[4]</figcaption></figure><p id="fcb9219a-18a8-4517-a2ad-390f127d523d" class="">
+</p><p id="94037bc8-bb28-4079-a5b6-031ab7925233" class="">
+</p><figure id="cd31f9a4-2beb-49bf-b583-9e9448affebd" class="image"><a href="../RayMarch/Assets/hello_triangle_3_16_2022_2_34_37_PM.png"><img style="width:720px" src="../RayMarch/Assets/hello_triangle_3_16_2022_2_34_37_PM.png"/></a><figcaption>Terrain I generated with FBM noise, non uniform fog, and proper shadows. </figcaption></figure><figure id="d7c8ca10-a1ab-45f0-ade3-32ae5a2ec1f2"><div class="source"><a href="https://www.youtube.com/watch?v=rf6v7Nmy1Zk">https://www.youtube.com/watch?v=rf6v7Nmy1Zk</a></div></figure><h3 id="3d6d9b49-2ed1-4738-8001-f105466d7dac" class="">Ray Marched Terrain vs Mesh Terrain</h3><p id="da6a490f-8e19-4d24-a721-dcab1b9cdad4" class="">
+</p><p id="98066f81-0d1e-4e49-a306-4c2f987a7d50" class="">There are benefits and drawbacks to both methods of drawing terrain. First, mesh based terrain is much less computationally expensive and can therefore run at a higher framerate. Ray Marched Terrain can store nearly limitless detail as every pixel is calculated using a precise distance equation where a mesh has a finite number of polygons that limits the terrain resolution. </p><p id="7fcbc63a-2f54-4f17-b206-bc4f0500f275" class="">
+</p><h3 id="c018482a-ca62-4a9e-9709-c178824b2fc1" class="">Conclusion</h3><p id="77f1c346-9a32-4069-af05-1c54fefa8e24" class="">
+</p><p id="050f8480-6928-4029-987f-13825518e6b4" class="">In this project, I learned much about basic ray marching effects and implemented a few different techniques to create a variety of interesting effects. While I learned a lot, I feel like there’s a lot more to develop using the methods I worked with. For example, I’d be interested in adding volumetric clouds or bodies of water into my terrain project using the transparency effects I developed. </p><p id="0b7f8266-4f29-464f-89e3-e24b0be400fc" class="">If you have any interest in this project, or would like to learn more, please contact me:</p><p id="064f9b69-02e5-478b-a58f-4d5e3789de72" class="">Tyler Bovenzi</p><p id="fe358bf4-478a-42ad-a712-be01097ffdfb" class="">tbovenzi@calpoly.edu</p><p id="b8c5cb34-2a4c-42de-a40a-28974b86fe26" class="">
+</p><h3 id="f3427a1e-31f4-4661-b9e2-93445204949b" class="">Controls</h3><p id="708ee568-6b1f-4d46-808f-9ae1e7cbe1ec" class="">
+</p><p id="d041d051-2f44-4244-982d-2512212d121f" class="">Primitives Playground</p><ul id="0372d806-b880-44d9-b8a4-ed45e9d943e6" class="bulleted-list"><li style="list-style-type:disc">WASD to move sphere</li></ul><ul id="36a9b7f3-a722-48a3-94e9-0ddfbecb9873" class="bulleted-list"><li style="list-style-type:disc">1, 2, and to cycle scenes</li></ul><ul id="33bab8d5-96dd-42da-b5b7-9cbd8d5bea02" class="bulleted-list"><li style="list-style-type:disc">4 and 5 to enable/disable sphere noise</li></ul><ul id="fb631fda-6750-47a9-8d43-e5da99350fe5" class="bulleted-list"><li style="list-style-type:disc">R and F to increase/decrease blending factor</li></ul><p id="afb090cc-2b6f-45b2-a743-77ac9bd37f42" class="">
+</p><p id="75d7e1cc-ec95-41cb-b62d-d9b744901bed" class="">Terrain</p><ul id="db13f19a-f191-4a83-b8c8-e850fe107e19" class="bulleted-list"><li style="list-style-type:disc">Mouse to pan camera</li></ul><ul id="3d8496c2-d1f4-4720-85bc-0aea07891ea5" class="bulleted-list"><li style="list-style-type:disc">W/S for forward and back</li></ul><ul id="6f718abb-62c3-4af7-8e9f-bd1dde3fd80a" class="bulleted-list"><li style="list-style-type:disc">R and F to increase/decrease render distance</li></ul><p id="1978f40b-1da4-4a4a-b545-8a778dde71c9" class="">
+</p><p id="b01059bd-690d-4ca2-bea8-01cceaef0f1b" class="">Sources:</p><p id="a74b474c-763b-4294-9ef9-83495f93a5e1" class="">
+</p><ol type="1" id="3dfcb2a4-9c5a-454e-b427-1bf3c13a81cb" class="numbered-list" start="1"><li>“Adrian&#x27;s Soapbox.” <em>Raymarching Distance Fields: Concepts and Implementation in Unity</em>, https://adrianb.io/2016/10/01/raymarching.html. </li></ol><ol type="1" id="48d085d9-3750-4b60-bafd-358f52200249" class="numbered-list" start="2"><li>“Ray Marching.” <em>Michael Walczyk</em>, https://michaelwalczyk.com/blog-ray-marching.html. </li></ol><ol type="1" id="7c2e9848-55b3-4f6b-941a-487d419e1e7e" class="numbered-list" start="3"><li>“Creating a Volumetric Ray Marcher”, https://shaderbits.com/blog/creating-volumetric-ray-marcher. </li></ol><ol type="1" id="7600add1-1c81-43fe-9d51-7d208e2eae55" class="numbered-list" start="4"><li>Quilez, Inigo. <em>Inigo Quilez</em>, https://www.iquilezles.org/www/articles/terrainmarching/terrainmarching.htm. </li></ol><p id="d4a131f3-baab-4a37-a0cc-61b80ddd679f" class="">
 </p></div></article></body></html>
