@@ -1,0 +1,675 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Real Time Geolocation and Weather Device “Citadel” </title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f55be19e-8139-4e04-8552-7077c3c50dff" class="page sans"><header><h1 class="page-title"><strong>Real Time Geolocation and Weather Device “Citadel” </strong></h1></header><div class="page-body"><p id="4e224abf-538e-4302-88c4-eae5b220da9e" class="">
+</p><figure id="5bec3981-910a-4e02-857f-e58c1e33288f" class="image"><a href="https://lh6.googleusercontent.com/v-7tC22srDKjGZbR-utaDs3F7daBpsUckX9RIWxc75dUZEem6US2QvPqXnQWjnTVkpNxi9oQydU4rKRMmzm5Soo7qZp-vnB7rS21vLAJYxFFkX7Z__4-z9HVESUTwmJytANsKBCtDd9rWNzW8w"><img src="https://lh6.googleusercontent.com/v-7tC22srDKjGZbR-utaDs3F7daBpsUckX9RIWxc75dUZEem6US2QvPqXnQWjnTVkpNxi9oQydU4rKRMmzm5Soo7qZp-vnB7rS21vLAJYxFFkX7Z__4-z9HVESUTwmJytANsKBCtDd9rWNzW8w"/></a></figure><p id="d6d79e77-09fa-440d-9949-26d4a4b1e58d" class="">
+</p><p id="d6d2b59f-9910-4d87-a0a2-383780ddeefd" class=""><strong>By Tyler Bovenzi</strong></p><h1 id="5bf1505b-2a21-4920-87ca-d8f54f6f7749" class=""><strong>Initial Ideas</strong></h1><p id="6ebea6b6-367d-440b-8f89-170e0d4f82dd" class=""><strong>Concept</strong></p><p id="ca2acdfd-bb7b-4fe9-8f51-011d154c0d21" class="">
+</p><p id="9982c654-a3a0-4392-b460-03eef29d0462" class="">The purpose of this project is to create a custom real time geolocation and condition reporting device. This device should be self contained on a printed circuit board with the option to connect auxiliary chargers, batteries and antenna. Such a device should report sensor recordings remotely, such that they can be viewed on a webpage or remote terminal. Ideally, software changes can also be made remotely while the device is being used in the field to allow dynamic usability.</p><p id="dcb22040-eef0-4a41-99b0-7b8f219f813e" class="">The final version of this device will consist primarily of small form factor, surface mount components, as to minimize the footprint. These components should be inexpensive, easy to replace, and well documented for future integrations.</p><p id="b1694699-701a-4029-bc53-2c140a894be8" class="">Power should be delivered by an attached rechargeable battery. The board will also host a regulated auxiliary power input to permit integration with solar cells or other sources in the field. Local communication and charging will be facilitated through an onboard universal connector, such as micro USB or USB type C.</p><p id="4d42b949-b364-4e22-aa63-22260980d8c5" class=""><strong>Desired Features</strong></p><p id="3294c042-cf91-4b13-9628-742814486283" class="">There were a host of features I wanted the final version of the project to have:</p><ul id="1a200d56-2931-4e22-802c-cf4f94f39184" class="bulleted-list"><li style="list-style-type:disc">Weather<ul id="b04589be-317f-4477-862d-dd2a40c0b62d" class="bulleted-list"><li style="list-style-type:circle">Pressure</li></ul><ul id="0cafbe1b-6651-4d90-9f29-c12f2e423a3a" class="bulleted-list"><li style="list-style-type:circle">Humidity</li></ul><ul id="6624bd84-eca9-49f2-904c-3a0993e2a60c" class="bulleted-list"><li style="list-style-type:circle">Temperature</li></ul></li></ul><ul id="7efcac98-7173-4e57-b1e1-83df0b0950fe" class="bulleted-list"><li style="list-style-type:disc">Air Quality Monitoring<ul id="2b834ca0-23df-4395-a706-8d5430e7f93b" class="bulleted-list"><li style="list-style-type:circle">TVOC</li></ul><ul id="a025cb86-9f8e-4fe5-a2d7-562ac9ef95af" class="bulleted-list"><li style="list-style-type:circle">CO2</li></ul></li></ul><ul id="db073589-e30b-4fd4-8e38-cbaad769b7d8" class="bulleted-list"><li style="list-style-type:disc">Cellular Communication</li></ul><ul id="a21f46f2-a108-4c6a-b2ca-4fb3b5b4ba7f" class="bulleted-list"><li style="list-style-type:disc">Geopositioning data</li></ul><ul id="fe42bd98-be10-41b9-a142-60b98c578680" class="bulleted-list"><li style="list-style-type:disc">Status Indication</li></ul><ul id="8012b591-aa04-45a3-9939-99071fbc8715" class="bulleted-list"><li style="list-style-type:disc">Power management</li></ul><ul id="bbd9837f-7875-4af2-a5b7-3ff9f996a5ba" class="bulleted-list"><li style="list-style-type:disc">GPIO Expansion</li></ul><ul id="6acdc56b-c7d1-46a2-824b-0cd1d1ccaca9" class="bulleted-list"><li style="list-style-type:disc">Auxiliary Antenna Support</li></ul><h1 id="cff2681c-9ae9-42d9-833e-f9008da0f6fa" class=""><strong>Integrated Technologies</strong></h1><p id="1950abd3-92e8-42d7-9f33-33fd19cf7f5a" class=""><strong>Integrated Circuits</strong></p><ul id="86994f33-d6c0-4762-b206-54a43db4af0a" class="bulleted-list"><li style="list-style-type:disc">BME280	Temperature, Pressure, Humidity</li></ul><ul id="de77d975-3150-4549-bcd9-60804715d008" class="bulleted-list"><li style="list-style-type:disc">CCS811	Air Quality Index</li></ul><ul id="3b1e20ec-d912-4f20-8c27-0f3c4aa79fd3" class="bulleted-list"><li style="list-style-type:disc">SAM M8Q	Global Positioning System</li></ul><ul id="3b2c2d8a-566d-44ae-ba26-6cc7eb5954f2" class="bulleted-list"><li style="list-style-type:disc">Particle E Series	Microcontroller, Power Management, Cellular</li></ul><p id="e01db820-aa0c-4709-8c19-e3e8a8954825" class=""><strong>Additional Components</strong></p><ul id="b4609648-5966-4372-a13b-17966a12c0cb" class="bulleted-list"><li style="list-style-type:disc">2000mAh 3.7V Lithium Polymer Battery<ul id="e0da9ed5-8c30-421d-bc96-27799c21ea34" class="bulleted-list"><li style="list-style-type:circle">Coin Cell Battery for GPS persistent power</li></ul></li></ul><ul id="a1e09eb9-56c4-4a2d-beb9-26afb8a2d9ae" class="bulleted-list"><li style="list-style-type:disc">Penta Band Cellular Antenna</li></ul><ul id="ba2a5e1e-228d-4ba6-8996-5a4fc833eff2" class="bulleted-list"><li style="list-style-type:disc">Status Indicating LEDs<ul id="fbbce292-593f-4186-bd3b-ba0677e853e6" class="bulleted-list"><li style="list-style-type:circle">Green, Blue, RGB</li></ul></li></ul><ul id="7ec0e0c0-9e69-4596-9941-fe16120fae68" class="bulleted-list"><li style="list-style-type:disc">Assorted Resistors and Capacitors</li></ul><ul id="a4dd106c-03ad-410d-ac92-1d73c77e618c" class="bulleted-list"><li style="list-style-type:disc">Mode Push buttons</li></ul><p id="38a0943d-65ba-4d46-a8c9-65704225baf0" class=""><strong>Bill of Materials</strong></p><p id="720c9bdc-45c6-404b-bef4-aafd8a256b12" class="">
+</p><table id="2b0c6be1-64da-4be9-b85e-fe8fbbff8d4b" class="simple-table"><tbody><tr id="e2e3f6af-19a1-4754-8abf-8730b9536d13"><td id="L:Ta" class="">Part</td><td id="y=aF" class="">Cost</td><td id="gFQX" class="">Number</td><td id="[Ygg" class="">Net</td></tr><tr id="9d4e1695-5c9a-4de3-9340-40ee777d0540"><td id="L:Ta" class="">USB C</td><td id="y=aF" class="">$2.50</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">$2.50</td></tr><tr id="0da03a48-02ac-4aee-9109-7e0077545048"><td id="L:Ta" class="">BME280</td><td id="y=aF" class="">$6.55</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">$6.55</td></tr><tr id="8e1c5ca4-a8d2-4664-8371-c708bef7ba6a"><td id="L:Ta" class="">CCS811</td><td id="y=aF" class="">$12.80</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">$12.80</td></tr><tr id="ea4a2d41-aa8e-4412-8588-1fd4c121c1e9"><td id="L:Ta" class="">SAM_M8Q</td><td id="y=aF" class="">$25.00</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">$25.00</td></tr><tr id="af4240ed-a34b-4c51-beb8-73ddd6927f42"><td id="L:Ta" class="">JST</td><td id="y=aF" class="">$0.58</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">$0.58</td></tr><tr id="1cd2d115-9c95-4cba-a087-341646d4dee0"><td id="L:Ta" class="">RGB</td><td id="y=aF" class="">$0.19</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">$0.19</td></tr><tr id="373cf689-f80a-4f4e-bc9f-a57805fa1947"><td id="L:Ta" class="">CoinCell</td><td id="y=aF" class="">$1.75</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">$1.75</td></tr><tr id="d086f613-8026-48e3-8b38-18d8aedf030f"><td id="L:Ta" class="">1k resistor array</td><td id="y=aF" class="">$0.40</td><td id="gFQX" class="">2</td><td id="[Ygg" class="">$0.80</td></tr><tr id="14eeb8e9-fbb6-4b74-bd44-97af0640f3cf"><td id="L:Ta" class="">Green LED</td><td id="y=aF" class="">$0.22</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">$0.22</td></tr><tr id="dc08952a-d6fb-4a1c-a61f-87ad01860ab6"><td id="L:Ta" class="">Blue LED</td><td id="y=aF" class="">$0.18</td><td id="gFQX" class="">2</td><td id="[Ygg" class="">$0.36</td></tr><tr id="d41e87f1-a33d-4bb0-aab5-9dfc511ffe4e"><td id="L:Ta" class="">E Series/Ant/Bat</td><td id="y=aF" class="">$82.62</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">$82.62</td></tr><tr id="80c20409-792c-4e50-a730-7dd228c95e3b"><td id="L:Ta" class="">1.0uf cap</td><td id="y=aF" class="">0.38</td><td id="gFQX" class="">2</td><td id="[Ygg" class="">0.76</td></tr><tr id="35d3da90-2fdc-43d0-ad82-4d6022ef73ed"><td id="L:Ta" class="">22 res</td><td id="y=aF" class="">0.1</td><td id="gFQX" class="">2</td><td id="[Ygg" class="">0.2</td></tr><tr id="21400826-7020-494a-868c-a72760215063"><td id="L:Ta" class="">2.2k res</td><td id="y=aF" class="">0.1</td><td id="gFQX" class="">2</td><td id="[Ygg" class="">0.2</td></tr><tr id="fad271a5-ac01-4905-a0c7-e05733165892"><td id="L:Ta" class="">100k res</td><td id="y=aF" class="">0.1</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">0.1</td></tr><tr id="676a7dd3-75bb-4d8d-8a59-7c83605a5f1a"><td id="L:Ta" class="">4.7k res</td><td id="y=aF" class="">0.35</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">0.35</td></tr><tr id="da955065-1654-44f7-9bef-c5bd86a9e33b"><td id="L:Ta" class="">3.3k res</td><td id="y=aF" class="">0.035</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">0.035</td></tr><tr id="21ffa589-2ec9-4f18-b697-c4d983c393fb"><td id="L:Ta" class="">button</td><td id="y=aF" class="">0.21</td><td id="gFQX" class="">2</td><td id="[Ygg" class="">0.42</td></tr><tr id="fc757de7-c405-4591-9963-3fbae47353b4"><td id="L:Ta" class="">diode</td><td id="y=aF" class="">0.41</td><td id="gFQX" class="">1</td><td id="[Ygg" class="">0.41</td></tr><tr id="10cc145b-92db-4125-96b8-9be14a7fb225"><td id="L:Ta" class="">Total</td><td id="y=aF" class=""></td><td id="gFQX" class=""></td><td id="[Ygg" class="">$135.44</td></tr></tbody></table><p id="08543907-2533-4b1a-be47-61db1519cfac" class=""><strong>Additional Expenses</strong></p><ul id="d698483b-b250-4ff2-859c-426877cec39f" class="bulleted-list"><li style="list-style-type:disc">PCB manufacturing: JLCPCB<ul id="5f7cf317-c3ec-45b4-988d-2eb42bb16e96" class="bulleted-list"><li style="list-style-type:circle">Cheaper than OshPark, similar manufacture time</li></ul></li></ul><ul id="adb38803-7792-4745-8b79-5d47a24374b9" class="bulleted-list"><li style="list-style-type:disc">Assorted Components: Digikey<ul id="b45bf9c0-ce2d-4e19-b7e5-509c47f2afdb" class="bulleted-list"><li style="list-style-type:circle">Extensive component inventory</li></ul></li></ul><ul id="755b8637-4494-4874-8a9c-dbb4241e03cb" class="bulleted-list"><li style="list-style-type:disc">Specialty Connectors: Sparkfun<ul id="3845a725-40e8-431c-9e76-7670804b6fbf" class="bulleted-list"><li style="list-style-type:circle">Abundant Documentation</li></ul></li></ul><ul id="fe99e32b-5c03-4b0a-9afc-f7ca81c9027d" class="bulleted-list"><li style="list-style-type:disc">Microcontroller, Antenna, Battery: Particle</li></ul><ul id="a2231bc3-18fd-4af2-afc3-b566f410056c" class="bulleted-list"><li style="list-style-type:disc">Shipping: DHL, FedEx, UPS</li></ul><h1 id="a1d0d4b3-20b1-4d6a-90ca-4cd6f3dd4f97" class=""><strong>Schematic</strong></h1><p id="c5805a10-4513-4ff1-b640-e676f1c73a23" class=""><strong>Schematic Design</strong></p><p id="68f118e7-6e14-4056-8888-14f6ce78278f" class="">After researching the components I planned on using, I began laying out the design as an electrical schematic. After pouring through extensive datasheets, I learned the pinout of each component. I then decided on how to interface them and handle communication protocols. The GPS I used is capable of communicating via I2C as well as serial. I decided to use I2C to synchronously communicate with several components.</p><p id="26134525-6916-4aa5-846c-880b45e3d22c" class="">The particle E series acts as the master whereas the GPS, weather, and air quality sensors act as slaves. The CCS811 and BME280 sensors supported hardware defined I2C addresses. To conserve space on the PCB I connected the address pins to ground rather than using jumpers or switches. There is a jumper connecting pullup resistors on the I2C bus. Cutting these traces removes this part of the circuit.  Additionally, I added a few breakout headers such that I could interface with additional I2C devices not attached to the PCB.</p><p id="0b1a08c9-54fa-40e9-8fd7-bc5f2d4911b0" class="">I also added several digital and analog IO breakouts. The particle E series has extensive GPIO ports, 8 of these can be accessed by the pin headers implemented in the schematic.</p><p id="6f4c8e3b-77df-480e-bc0b-e103c15de540" class="">Other notable features include the RGB common anode status indication LED as well as several monochrome indicating LEDs for the power, battery, and gps. The schematic also features a mode and reset button that can be used to put the device in DFU mode, or reset the code.</p><p id="9244bcef-da80-401b-84f2-d8b47ca03741" class="">Several testpads allow for future integration with the JTAG interface as well as USB communication with the cellular modem.</p><p id="f698148a-45b5-458c-a723-22b9f559b788" class="">Lipo and auxiliary power connections are handled by the Particle E Series controller. A USB C connector allows for charging, flashing, and serial communication with the device.</p><p id="7eb74e5b-1fbb-4aab-a17f-71cd9426978c" class=""><strong>Particle E Series Controller</strong></p><figure id="b403d132-a959-4476-a35a-ec10bcf858d7" class="image"><a href="https://lh6.googleusercontent.com/NFHM01oQmbjBxbf4IO2cV5QD6-wubiBq26DDFptgO91nfZAn929wLbZXlKGpHZ0noF2n7pSZWRK-EBh_9tqx2DfreV9B16lR5YLPH0vobneY7erXPrWqEIrSFkr6LTA2q_z1tR6nnkWN8LH5Xg"><img src="https://lh6.googleusercontent.com/NFHM01oQmbjBxbf4IO2cV5QD6-wubiBq26DDFptgO91nfZAn929wLbZXlKGpHZ0noF2n7pSZWRK-EBh_9tqx2DfreV9B16lR5YLPH0vobneY7erXPrWqEIrSFkr6LTA2q_z1tR6nnkWN8LH5Xg"/></a></figure><p id="0f7809bc-998f-4254-8026-ff91d37d0a59" class=""><strong>CCS811 Sensor</strong></p><figure id="530bb429-9d7f-4a25-a2f3-42c30eadfad1" class="image"><a href="https://lh3.googleusercontent.com/p_IFW_ibsRao8migjNTKtNTE3wDcwzLqHtUmBCy-LAKWxt4G8DII5eoO3A3CxZqHlDES0GzB66jCy06VSHxKwGx2reT06N7XriAM7h9c2I5sn60Y5nIFSlOpSezhruIn3HlGtTlxE-upUnjwOw"><img src="https://lh3.googleusercontent.com/p_IFW_ibsRao8migjNTKtNTE3wDcwzLqHtUmBCy-LAKWxt4G8DII5eoO3A3CxZqHlDES0GzB66jCy06VSHxKwGx2reT06N7XriAM7h9c2I5sn60Y5nIFSlOpSezhruIn3HlGtTlxE-upUnjwOw"/></a></figure><p id="8420242c-a3ca-43fe-b05a-3d5a6d605316" class=""><strong>BME280 Sensor</strong></p><figure id="ff4fa275-49fe-434e-8e34-93997e5e5669" class="image"><a href="https://lh6.googleusercontent.com/EHEhQTrgATHsi2ixZ0Gv4pbUQf2oBP-RMd3lrO0dA9aX7dZbZeSn7jjWX8lvG6MdZAkAegFvZasQS2RvTB3fWdJvUNjlxkPfoQ41DtGmGA-Fou1DDT0S1aehkIOZpbvPp4oAqRhqDpvJql6Ouw"><img src="https://lh6.googleusercontent.com/EHEhQTrgATHsi2ixZ0Gv4pbUQf2oBP-RMd3lrO0dA9aX7dZbZeSn7jjWX8lvG6MdZAkAegFvZasQS2RvTB3fWdJvUNjlxkPfoQ41DtGmGA-Fou1DDT0S1aehkIOZpbvPp4oAqRhqDpvJql6Ouw"/></a></figure><p id="6eaa740c-01ba-4bf7-b9ad-d842d5d5768e" class=""><strong>SAM M8Q GPS</strong></p><figure id="77617363-b276-4b8d-b4c3-04a15afc5432" class="image"><a href="https://lh5.googleusercontent.com/Bvbz6jnu1RSO65ve0L_hEz_l_KkSBnmoRgpiQttOOxy4PfVmdr-rm108GY8e2c2d1Y3NaEJ7gc1hwNnVYM3sJkd3PJbrauAg2xspNdevxw3q48cYmhlG5tRwXw_GopCwapHdHp8HFVRQ_Bu48A"><img src="https://lh5.googleusercontent.com/Bvbz6jnu1RSO65ve0L_hEz_l_KkSBnmoRgpiQttOOxy4PfVmdr-rm108GY8e2c2d1Y3NaEJ7gc1hwNnVYM3sJkd3PJbrauAg2xspNdevxw3q48cYmhlG5tRwXw_GopCwapHdHp8HFVRQ_Bu48A"/></a></figure><p id="18264cb1-94c3-4a68-a1b5-c6ffe694d477" class=""><strong>Status Indication and GPS Back Up Power</strong></p><figure id="ed34a7c3-8b6a-4ee9-ba5b-0ec584de3c5e" class="image"><a href="https://lh5.googleusercontent.com/-qnxhPwf1pR5dLNdAkq2wE8ZXvL0VU-7Rh3USA9cK8axUpfSEOFVIpFqptYPI18jFScsBqKZQ6U_LhSQaqb5ZdF_2LdTudC6dBMP1sEsUOvwxnNj0ooseSdhOC2wVIpkcJSfAQvSG05SM4Bfew"><img src="https://lh5.googleusercontent.com/-qnxhPwf1pR5dLNdAkq2wE8ZXvL0VU-7Rh3USA9cK8axUpfSEOFVIpFqptYPI18jFScsBqKZQ6U_LhSQaqb5ZdF_2LdTudC6dBMP1sEsUOvwxnNj0ooseSdhOC2wVIpkcJSfAQvSG05SM4Bfew"/></a></figure><h1 id="d4932bc4-b5f4-458f-bb2f-f88688a627c1" class=""><strong>Board Design</strong></h1><p id="a25931e6-16d1-44dc-bbac-c30298a0a295" class=""><strong>Design Considerations</strong></p><p id="f74f5cbc-6c01-43a6-bfa9-2c875d5a9873" class="">While designing the printed circuit board (PCB) that would house the components, I first came up with a rough structure for where parts should be located. The USB interfaces, indications LEDs, pushbutton switches, and battery connection are located on the front end of the top side of the  PCB. In essence, everything the user interfaces with is in the same region of the board. The Particle E series controller board is on the back of the top side such that the castellated edge pins are more accessible to the rest of the board. Sensors and GPIO breakout headers are located in the middle. This helps prevent RF and thermal interference on the more sensitive components.</p><p id="b13744b5-e7f8-43a6-8047-df085224a2c4" class="">I designed the circuit board such that all components were mounted on the top side. While this was spatially inefficient, it simplifies assembly. Most resistors and capacitors use an 0603 form factor so it&#x27;s crucial that the design allows reflow soldering. All components on the board are surface mount with the exception of the USB C mounting holes and optional pin header breakouts for GPIO expansion.</p><p id="6575e922-03ea-46d2-a329-3b812097d31e" class="">The yellow lines on the right side of the board indicate the desired milling area. I wanted to cut out this region to allow the lipo battery cable and antenna connection to come from below the board to their respective connectors. This made it possible to mount the PCB flush inside a case made to the exact dimensions of the edges of the board.</p><p id="f407d139-d30f-4c22-af0d-f56384608a87" class="">I also placed 3M holes on each corner of the board for future mounting and other applications.</p><p id="37fbe9ce-1677-43f5-bebe-e71e9032177b" class="">I placed the lipo battery JST connector right next to the auxiliary power input. I also placed test pads on the bottom of the board to prevent cluttering on the top side.</p><p id="afe35a72-e5bc-499b-8c40-2792a7b5d7de" class="">Finally, there are a few icons on the board noting the air quality and temperature sensor, as well as my name and approximate date of design.</p><p id="85ecc9fd-dc27-4802-90b6-63673897413b" class=""><strong>Top Layer</strong></p><figure id="6d559016-b213-4d23-9503-7e18fc18ffff" class="image"><a href="https://lh6.googleusercontent.com/nvBYu3g3r21REBTd8DOr5i12CbQ0Y6IqnpttP_TC3liZkp5R0HK6GDClbgdUI_7kCv2dB4LQYWVpIhrjxV2lq0z0kn5d5U5WCqPD2PPpkJnAolknNSwHrxM0sjSwDV5J0r-Ild8vbBU9sLLHIg"><img src="https://lh6.googleusercontent.com/nvBYu3g3r21REBTd8DOr5i12CbQ0Y6IqnpttP_TC3liZkp5R0HK6GDClbgdUI_7kCv2dB4LQYWVpIhrjxV2lq0z0kn5d5U5WCqPD2PPpkJnAolknNSwHrxM0sjSwDV5J0r-Ild8vbBU9sLLHIg"/></a></figure><h1 id="fa2a9f25-aee1-4230-aa1f-2b6eae57b87b" class=""><strong></strong></h1><p id="ee385737-833f-467b-954e-2c38fa541142" class=""><strong>Bottom Layer (Mirrored)</strong></p><figure id="a4a16578-0b2c-496d-b16f-2695eda32a6d" class="image"><a href="https://lh6.googleusercontent.com/G9moNEtlpj5m0Xl_DsZ6ddczbyDEFjFjEzLw7aWuNR_v3vK5HyEtn4NT5T2OzR1IsiZ3OZ5PvI-8IWi5XrCf3GKfZ1h5RL0NnL4uCfxqZCbzOlh81AgW0KlJtP1HkawzhGc-25LM-A0BkaPrHA"><img src="https://lh6.googleusercontent.com/G9moNEtlpj5m0Xl_DsZ6ddczbyDEFjFjEzLw7aWuNR_v3vK5HyEtn4NT5T2OzR1IsiZ3OZ5PvI-8IWi5XrCf3GKfZ1h5RL0NnL4uCfxqZCbzOlh81AgW0KlJtP1HkawzhGc-25LM-A0BkaPrHA"/></a></figure><h1 id="92017db5-0dd7-4278-a5e7-80304a7875af" class=""><strong>Enclosure</strong></h1><p id="d8946f96-6349-438c-824d-198d3ef26442" class=""><strong>Design Process</strong></p><p id="c312f9da-8b42-4572-be5e-95b974d4efa0" class="">In Fusion 360, I sketched the dimensions of the circuit board to design the enclosure around. I decided the board would sit on top of the box such that buttons and connectors were easily accessible. To accommodate this, I designed a box with an interior cavity to house the lipo battery and antenna.</p><p id="97befc5f-dafa-4a17-8c06-b8c148cd5c7a" class="">To facilitate electrical connections between the top and bottom and what lies beneath it, I cut out a section to match the opening milled on the PCB. I also left holes to thread 3M screws. This eliminated the need for thread inserts or tapping.</p><p id="385bde87-4104-49b7-bc76-af2b5142be4d" class="">The design documents included are the section version. I ended up creating a cut out such that the antenna could sit flat without extending the size of the enclosure. I printed the enclosure on a Creality Ender 3.</p><p id="7a00eb77-7ec1-43b4-8d04-4552453b264d" class="">Below I’ve included some pictures of the enclosure as well as some figures to conceptualize its assembly:</p><figure id="9ba52349-1f42-463c-b83a-d925848f13ac" class="image"><a href="https://lh6.googleusercontent.com/e3C_RynizlqolVpKE7wAx3aJDpSYSPP_Oiwo_9mtRDv_QPVKlCFzOoPFT0VDOPFuNz_n8b0IhclIEwgl4KZ3naT1YzArUAf0n6OREteMqiRwDfxUjeKgDJ2V-MZ0ZlH_QHYdpOPqgh-msnXstQ"><img src="https://lh6.googleusercontent.com/e3C_RynizlqolVpKE7wAx3aJDpSYSPP_Oiwo_9mtRDv_QPVKlCFzOoPFT0VDOPFuNz_n8b0IhclIEwgl4KZ3naT1YzArUAf0n6OREteMqiRwDfxUjeKgDJ2V-MZ0ZlH_QHYdpOPqgh-msnXstQ"/></a></figure><figure id="37a550b3-293c-4968-88dc-78f2ac58967d" class="image"><a href="https://lh6.googleusercontent.com/4WrrsnOmnVAnKlSCi5Xpt9NoLWnSAuAOn3QBygO7RGWwESL2albbcA-8s8WsQloLWYN5zUiFIaaSYhn91SOfre6_zTUJBLICd-hWLf4KCx5wVhzTEemjNAhEzNBlxNadARssR0WuAcyy7wa92Q"><img src="https://lh6.googleusercontent.com/4WrrsnOmnVAnKlSCi5Xpt9NoLWnSAuAOn3QBygO7RGWwESL2albbcA-8s8WsQloLWYN5zUiFIaaSYhn91SOfre6_zTUJBLICd-hWLf4KCx5wVhzTEemjNAhEzNBlxNadARssR0WuAcyy7wa92Q"/></a></figure><p id="e347fb16-7f8d-4d0d-854a-02faef84aa45" class=""><strong>Component Layout within Enclosure</strong></p><figure id="51be319e-9cb4-4e50-946a-1df76643405b" class="image"><a href="https://lh3.googleusercontent.com/hogYy7KIbkT6eYmff7zXnDPfyOpunRKJguBs_qZQF7Amz2XtVr3Ruw5NYvg3Ql2UZiGP0Hw_4mQHN864TJ2c_87SsIPDAA1-fXbS6YQTG2OZFTUq0cS0o7bux_fnPT-XNO_LIfrctBcSBlE9RA"><img src="https://lh3.googleusercontent.com/hogYy7KIbkT6eYmff7zXnDPfyOpunRKJguBs_qZQF7Amz2XtVr3Ruw5NYvg3Ql2UZiGP0Hw_4mQHN864TJ2c_87SsIPDAA1-fXbS6YQTG2OZFTUq0cS0o7bux_fnPT-XNO_LIfrctBcSBlE9RA"/></a></figure><p id="0ff766c1-3aa6-400c-bfa1-d8ac6df8f177" class=""><strong>Side Profile with Enclosure Hidden</strong></p><figure id="14ea68a1-c826-481b-9033-5f601ec00fe2" class="image"><a href="https://lh5.googleusercontent.com/R3SJt0NalKqjhHwd3zYpLTSu4i4cIIFD2T_dhOzAnVkS4Dr8EW-l8QP6YWK1m7SX9JOhxfDrfVRRrowz6KbcdR2WLT-MXKIF2nhDAGeY9Bzvsz5UC36uIKwo_Hw8utXX_CDGCaTjqqbYvLge5Q"><img src="https://lh5.googleusercontent.com/R3SJt0NalKqjhHwd3zYpLTSu4i4cIIFD2T_dhOzAnVkS4Dr8EW-l8QP6YWK1m7SX9JOhxfDrfVRRrowz6KbcdR2WLT-MXKIF2nhDAGeY9Bzvsz5UC36uIKwo_Hw8utXX_CDGCaTjqqbYvLge5Q"/></a></figure><h1 id="65650f26-b170-4791-b5cd-87ab1de107ea" class=""><strong>Assembly</strong></h1><p id="6fd72764-a149-4c70-802d-7cb5fa745572" class=""><strong>Solder Application</strong></p><p id="3dfc7ba3-9936-42d1-9b61-7e9b926b6c1b" class="">I began assembly by attached extra blank PCBs to a flat board to create a well that held the target board in place. The stainless steel stencil came as a large unwieldy sheet. I used tin snips to cut it to size. I placed the target PCB in the jig and secured it with electrical tape. I lined up the pads on the board with the corresponding cut outs on the stencil and secured the stencil with more tape.</p><p id="4be5bfb5-aff8-4f23-b397-c2074a5e68ef" class="">I applied a thin line of solder paste on top of the stencil and used a plastic card to evenly move the paste onto the pads. I repeated this process until there was a sufficient amount of solder paste on all solder pads. I then lifted the stencil to ensure no bridges were made that could prevent desired functionality down the road.</p><p id="214f668e-58ec-4592-b1ea-502d4c8b15ec" class=""><strong>Component Placement</strong></p><p id="a0f8cdc1-0269-4b71-ab31-7b74be8fa741" class="">With solder paste already applied, I used tweezers to carefully place components on the board. I started with components of more complexity and difficulty, such that mistakes could be corrected without extensive backtracking. After placing a few of the integrated circuits, I moved to the smaller passive components. I used the relevant data sheets for components to ensure orientation and pinout were correct before putting them on the PCB.</p><p id="4d476f8f-265c-4665-9a06-f28654610369" class=""><strong>Reflow Soldering</strong></p><p id="bdb646b0-c553-44e6-a9c8-ca1ebad0022c" class="">After the components had been placed, I was ready to reflow. I placed the PCB on a hot plate using foil to separate the two. I gradually increased heat to melt the solder paste while ensuring heat was low enough to prevent damage to components. The solder paste changed color from a dull gray to a bright silver, indicating that the components had been successfully connected. After a few minutes, all pads became shiny, indicating the process was complete. I then tested continuity with a multimeter before applying power to the circuit.</p><h1 id="197abb94-c7de-429b-bdd8-ba05bb84f493" class=""><strong>Repairs and initialization</strong></h1><p id="40cd9bf0-4f2f-4629-b276-ac416abc8b1c" class=""><strong>Repairing USB data connection</strong></p><p id="4a5117ff-fdc4-4706-9adf-c8b484577512" class="">Testing the functionality of the board revealed that all systems were functional except for USB data transmission and reception. After careful consideration of the schematic I determined there had been a wiring error where the top and bottom of the data were not connected. On top of this, D+ was connected to the top rail of the USB C connector, while the D- was connected to the negative rail. To fix this, I soldered a male pin header to D+ rail and connected the USB connector as normal. Using a custom cable allowed me to send and receive commands to and from the board. Below I have included a snippet of the flawed portion of the schematic as well as my temporary solution. This setup is not ideal, I plan on fixing this by either soldering the correct connection on the USB C connector, or remaking the PCB at a later date.</p><figure id="fb569f0f-0256-4d28-b15d-cd1c89ba5bcf" class="image"><a href="https://lh3.googleusercontent.com/hogYy7KIbkT6eYmff7zXnDPfyOpunRKJguBs_qZQF7Amz2XtVr3Ruw5NYvg3Ql2UZiGP0Hw_4mQHN864TJ2c_87SsIPDAA1-fXbS6YQTG2OZFTUq0cS0o7bux_fnPT-XNO_LIfrctBcSBlE9RA"><img src="https://lh3.googleusercontent.com/hogYy7KIbkT6eYmff7zXnDPfyOpunRKJguBs_qZQF7Amz2XtVr3Ruw5NYvg3Ql2UZiGP0Hw_4mQHN864TJ2c_87SsIPDAA1-fXbS6YQTG2OZFTUq0cS0o7bux_fnPT-XNO_LIfrctBcSBlE9RA"/></a></figure><figure id="452fd3df-fa1e-40f7-b430-0bcc21f26716" class="image"><a href="https://lh6.googleusercontent.com/nvBYu3g3r21REBTd8DOr5i12CbQ0Y6IqnpttP_TC3liZkp5R0HK6GDClbgdUI_7kCv2dB4LQYWVpIhrjxV2lq0z0kn5d5U5WCqPD2PPpkJnAolknNSwHrxM0sjSwDV5J0r-Ild8vbBU9sLLHIg"><img src="https://lh6.googleusercontent.com/nvBYu3g3r21REBTd8DOr5i12CbQ0Y6IqnpttP_TC3liZkp5R0HK6GDClbgdUI_7kCv2dB4LQYWVpIhrjxV2lq0z0kn5d5U5WCqPD2PPpkJnAolknNSwHrxM0sjSwDV5J0r-Ild8vbBU9sLLHIg"/></a></figure><p id="628d4fcc-75c4-4015-a3ba-4df32631c021" class="">
+</p><p id="5ca07af7-c043-40d9-b6da-e387e787e00b" class="">
+</p><p id="ff205457-3e18-475a-9b93-152aa1dab7d8" class=""><strong>Initialization</strong></p><p id="08a80b63-f880-4008-a233-283353af2298" class="">Initializing the board required flashing code using the Particle command line interface. After being set up, the device can receive code via cellular communication. After installing particle drivers and API, I opened command prompt, connected the board to my computer, and typed <em>particle setup</em>. The software walked me through the steps, allowing me to log in, detect my device, and flash the basic pre-written code. I restarted the device and allowed the cellular modem to connect, as indicated by the steady cyan light.</p><p id="d9187c46-c1b2-49d9-a792-e2a598d85b25" class="">With the device connected I could manage vitals, view the events console, and monitor the device remotely through the browser based Particle console. I’ve included some of the sample interfaces from the console below.</p><figure id="91bb6cd4-b4c4-4814-8b36-2b567b8b955e" class="image"><a href="https://lh6.googleusercontent.com/xjXHOKNTxMwmlSMlA7bSb_QkKD7GLaEib_F44MF3Mj5jC7tGBeTNmMATFsA8-DtG6dLCspysS7niwoQJzFG32PsKYTDWAZfPvF8d-9Pgx4qmGh7p9Txtqw59oVu7JHUWSttKPlFhd82oj9sl5g"><img src="https://lh6.googleusercontent.com/xjXHOKNTxMwmlSMlA7bSb_QkKD7GLaEib_F44MF3Mj5jC7tGBeTNmMATFsA8-DtG6dLCspysS7niwoQJzFG32PsKYTDWAZfPvF8d-9Pgx4qmGh7p9Txtqw59oVu7JHUWSttKPlFhd82oj9sl5g"/></a></figure><figure id="b2aa864c-0f6a-4e7c-b7ff-19f9b3f0ee3a" class="image"><a href="https://lh6.googleusercontent.com/mZFw4mEkZLOZV3hwDshyM3n4E--bliYYvKAU_Ap4pRtSMJA9EgqRDLY3Os5p8xO-mHVk38OspJDAjl6OJxSH8DmZuEVnK7qRVox71Wc7RoAwS_H9Bs-mxZJ2y_aZ6zo53lUFfIy1RZrbnv6KKQ"><img src="https://lh6.googleusercontent.com/mZFw4mEkZLOZV3hwDshyM3n4E--bliYYvKAU_Ap4pRtSMJA9EgqRDLY3Os5p8xO-mHVk38OspJDAjl6OJxSH8DmZuEVnK7qRVox71Wc7RoAwS_H9Bs-mxZJ2y_aZ6zo53lUFfIy1RZrbnv6KKQ"/></a></figure><h1 id="16a15b31-c760-4380-996b-249906eb3d8c" class=""><strong>Functionality</strong></h1><p id="cfdd6e66-1317-4e0e-bdd2-418d6f7557fa" class=""><strong>Board capabilities</strong></p><p id="56acb777-cb56-4684-b982-3539c068cdb6" class="">With both the hardware and software completed and functional, the board has extensive capabilities. First, the device reads temperature, humidity, atmospheric pressure, and air quality to a high degree of precision. It does this by using recorded values to calibrate the sensors during operation. For example, the device uses temperature recording to better approximate the humidity readings.</p><p id="60614e9e-189a-4a8a-a320-5b71286bfde1" class="">Additionally, the SAM M8Q GPS provides geolocation data with accuracy of a few meters. This data is sent via I2C to microcontroller where it can be analyzed, time stamped, and posted remotely wherever necessary. The GPS IC takes a few minutes to lock on when indoors, and mere seconds without overhead obstructions. The backup battery allows the GPS to maintain satellite connectivity during hibernation states and restarts.</p><p id="15ca23ab-ddd8-45ab-8691-20f20fca4603" class="">The Particle Electron Microcontroller handles power management. The Lipo battery can be charged during use both by the USB and auxiliary power connector. Typical battery life can range between a few days up to several weeks depending on power mode. The battery status is accessible via updates sent to the Particle Console.</p><p id="68bb19bc-e93a-4656-aeaf-52543e0ff5fc" class="">The onboard cellular modem connects the device to the cloud. Similar to the GPS, locking on to reception can take anywhere from a few seconds to a few minutes depending on nearby obstructions and area signal strength. The cloud status is indicated on the board, and connectivity vitals can be acquired via the console as well.</p><p id="d8da8006-b53b-4fa7-9238-e47282257c41" class=""><strong>Typical Usage</strong></p><p id="80e1d4c9-0cc5-4517-aaf5-756f6f82d77f" class="">Currently, typical operation consists of the following:</p><ol type="1" id="9fedeb1c-731d-4691-a9f5-f95350954a5b" class="numbered-list" start="1"><li>Connection to cellular network and GPS satellites</li></ol><ol type="1" id="c1dbd661-a7fa-44ce-ab96-ad0acbd8d5e4" class="numbered-list" start="2"><li>Initialization of databases and connection to web servers</li></ol><ol type="1" id="2d846949-1bc8-4f3d-a553-d5ec03db4703" class="numbered-list" start="3"><li>Sensor calibration period</li></ol><ol type="1" id="3c488ee5-e8bd-4c5c-8af2-0c8d600554d4" class="numbered-list" start="4"><li>Sensor data acquisition</li></ol><ol type="1" id="9efae5a2-0be6-48dd-b1be-2bee5c4566ce" class="numbered-list" start="5"><li>Update server with new geolocation and weather data</li></ol><ol type="1" id="e117bc58-de5a-49c3-8d07-2191589f7876" class="numbered-list" start="6"><li>Hibernation - Loop steps 4, 5, and 6</li></ol><p id="bffa3389-b05f-4783-bf38-e7bf538f7b9f" class=""><strong>Adafruit Dashboard</strong></p><p id="424ee016-e002-4794-acf7-37a09086879d" class="">I used adafruit.io to create a browser based dashboard for the device to send readings to. Recorded weather data is displayed on gauges with customizable ranges. I also wanted to see a history of temperature data. Temperature readings are displayed on a line graph that visualizes weather over time. Geolocation data is plotted on an interactive map. This connects each location reading, displaying the path taken.</p><p id="0cdf739f-f455-48fd-ac6e-309fec53e795" class="">The device sends MQTT updates to the dashboard. These updates are automatically displayed as soon as they come in. A list of updates containing timestamps is contained in the feed and accessible to project administrators.</p><p id="2481ae46-5b3f-4fac-ab84-7dd40058c9ca" class=""><strong>Sensor Gauge Example</strong></p><figure id="bbf8b63d-f807-47e4-bd57-de43a2286f6b" class="image"><a href="https://lh3.googleusercontent.com/Eb-ivqQcaZenh6N2zIcgeWJFEiBXSnj1ejufQwPE2v3hr0kVHqqtBY07Oyl_LNZxz2rUXW388ezkI8YdIhfIUxmigRmBFi5aMlRE9dfnGHrOybeSra67e9cE2HzVodyIVavETc1Bd-UzTrG50w"><img src="https://lh3.googleusercontent.com/Eb-ivqQcaZenh6N2zIcgeWJFEiBXSnj1ejufQwPE2v3hr0kVHqqtBY07Oyl_LNZxz2rUXW388ezkI8YdIhfIUxmigRmBFi5aMlRE9dfnGHrOybeSra67e9cE2HzVodyIVavETc1Bd-UzTrG50w"/></a></figure><h1 id="699e6c62-cd95-4556-81ae-080253aeee93" class=""><strong>What I learned from the project</strong></h1><p id="99adb22c-6d79-470c-b4c1-3956d118df79" class="">Over the course of the project I learned about component comparison, circuit design, PCB manufacturing, assembly, diagnostics, software engineering, and more.</p><p id="170b6ae4-f280-4d71-b0d8-cef8bf5f9695" class="">Component Comparison was a very educational, yet time consuming process. For each of the IC’s I implemented in the final design, I spent several hours researching data sheets, reading forums, looking at circuit schematics, and comparing prices. This process allowed me to fully understand the functionality of each component and prevent any potential interfacing problems down the road.</p><p id="ddc0d63c-2f96-4e30-94cb-0c4667b267db" class="">Before this project, I had completed several other circuit design projects. These projects were basic, and involved inefficient layouts. Early projects also primarily consisted of through hole components. For this project, I wanted to make the board as dense and space efficient as possible. To do this, I researched SMD components and imported them to Eagle. I also manually placed components and routed traces to minimize complexity and optimize thermal performance.</p><p id="601ac9d7-78c6-4391-9b27-bc786fbed40e" class="">When I started this project I was familiar with a soldering iron and had successfully soldered multiple through hole circuit boards. Surface mount assembly was a relatively new technique for me. I completed extensive research on this process and familiarized myself before attempting to assemble the real thing. The process worked on the first try, no components were damaged by the heating.</p><p id="2dea6b8f-88ed-4648-9e82-fef0968343f5" class="">The device did not connect to my computer when I powered it on. I spent several hours trying to troubleshoot the connection. I wasn’t sure if there was a problem with my design, a driver issue, or simply a computer io error. I later traced the origin to a missing trace in the board design file and made a temporary fix. While writing the software, I used the serial monitor and events console to log internal processes in order to find semantic errors.</p><p id="461b68b1-2c32-4ae7-a2b0-811aec5b1384" class="">Writing device firmware that accomplished the requirements was no easy task. I encountered countless problems due to sensors interfering with one another. I later fixed this by allowing the device to switch through different modes that only used compatible sensors, while turning off others. I also found myself switching communication protocols over the course of the project. I learned that the basic webpage data library I was using was not compatible with the interactive map interface. As a result, I later switched to MQTT.</p><p id="423b9a86-a776-467b-b17d-7dfbcf4a0f17" class="">Outside of the Electrical Engineering skills I acquired from this project, I learned a lot about research and logistics. To reduce complexity, I tried to consolidate the bill of materials to as few distributors as possible. With the several distributors I ended up using, I also had to plan shipping. I even deemed several distributors unfeasible due to logistic timing or cost.</p></div></article></body></html>

@@ -48,6 +48,8 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;
 }
 
+
+
 body {
   margin: 0;
   font-family: "Roboto Slab", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -2387,6 +2389,7 @@ textarea.form-control {
 
 .btn {
   display: inline-block;
+
   font-weight: 400;
   color: #212529;
   text-align: center;
@@ -2428,13 +2431,17 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 200;
+  line-height: 1.2;
+  font-size: 2.5rem;
   color: #fff;
-  background-color: #00a0e0;
+  background-color: #0089a8;
   border-color: #000000;
 }
 .btn-primary:hover {
   color: #fff;
-  background-color: #730000;
+  background-color: #007590;
   border-color: #000000;
 }
 .btn-primary:focus, .btn-primary.focus {

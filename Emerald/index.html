@@ -1,9 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Em</title>
+
+  <meta name="description" content="Two triangles with TWGL">
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+  <script src="http://graphics.cs.wisc.edu/JS/twgl-full.min.js"></script>
+  <script src="./scripts.js"></script>
+
 </head>
-<body>
-<p>Project Emerald is up and running</p>
+
+<body onload="start()">
+<canvas id="mycanvas" width="500" height="400"></canvas>
 </body>
+
+
+<script id="vs" type="notjs">
+  attribute vec3 pos;
+  attribute vec3 inColor;
+  varying vec3 outColor;
+  varying vec3 outPos;
+  uniform mat4 transf;
+
+  void main(void) {
+    gl_Position = transf * vec4(pos, 1.0);
+    outColor = inColor;
+    outPos = (pos+vec3(1.0, 1.0, 0.0))/2.0;
+  }
+</script>
+
+<script id="fs" type="notjs">
+
+  precision highp float;
+  varying vec3 outColor;
+  varying vec3 outPos;
+  uniform float time;
+  void main(void) {
+  vec3 new = outPos;
+
+    gl_FragColor = vec4(new, 1.0);
+
+    if(outPos.y < 0.4+(sin(time/200.0 + outPos.x*62.8)/20.0) ){
+      gl_FragColor = vec4(0.0, 0.0 , 0.0 ,1.0);
+    }
+    if(outPos.y < 0.1+(sin(time/100.0 + outPos.x*62.8)/20.0) ){
+      gl_FragColor = vec4(0.0, 1.0 , 0.0 ,1.0);
+    }
+  }
+</script>
+
+
 </html>
