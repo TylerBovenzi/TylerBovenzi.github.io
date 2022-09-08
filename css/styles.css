@@ -1,5 +1,84 @@
 @charset "UTF-8";
 
+.text--line {
+  font-size: 0.7em;
+}
+.text--line2 {
+  font-size: 0.5em;
+}
+svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.text-copy {
+  fill: none;
+  stroke: white;
+  stroke-dasharray: 10% 40%;
+  stroke-width: 2px;
+  animation: stroke-offset 4s linear;
+}
+.text-copy:nth-child(1) {
+  stroke: #00f9ff;
+  stroke-dashoffset: 10%;
+}
+.text-copy:nth-child(2) {
+  stroke: #f6f6f6;
+  stroke-dashoffset: 20%;
+}
+.text-copy:nth-child(3) {
+  stroke: #ececec;
+  stroke-dashoffset: 30%;
+}
+.text-copy:nth-child(4) {
+  stroke: #ececec;
+  stroke-dashoffset: 40%;
+}
+.text-copy:nth-child(5) {
+  stroke: #00f9ff;
+  stroke-dashoffset: 50%;
+}
+.text-fill {
+  fill: #ececec;
+  stroke: white;
+  stroke-dasharray: 10% 40%;
+  stroke-width: 1px;
+  animation: stroke-offset 9s linear;
+}
+.text-fill:nth-child(1) {
+  stroke: #00f9ff;
+  stroke-dashoffset: 10%;
+}
+.text-fill:nth-child(2) {
+  stroke: #f6f6f6;
+  stroke-dashoffset: 20%;
+}
+.text-fill:nth-child(3) {
+  stroke: #ececec;
+  stroke-dashoffset: 30%;
+}
+.text-fill:nth-child(4) {
+  stroke: #ececec;
+  stroke-dashoffset: 40%;
+}
+.text-fill:nth-child(5) {
+  stroke: #00f9ff;
+  stroke-dashoffset: 50%;
+}
+@keyframes stroke-offset {
+  0% {
+    fill: none;
+    stroke-dashoffset: 50%;
+    stroke-dasharray: 0 125%;
+  }
+}
+@keyframes stroke-fill {
+  0% {
+    fill: white;
+  }
+}
+
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
