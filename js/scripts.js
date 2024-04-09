@@ -54,3 +54,20 @@
     // Collapse the navbar when page is scrolled
     $(window).scroll(navbarCollapse);
 })(jQuery); // End of use strict
+
+
+function EasyPeasyParallax() {
+    scrollPos = $(this).scrollTop();
+    $('#banner').css({
+        'background-position' : '50% ' + (-scrollPos/3)+"px"
+    });
+    $('#bannertext').css({
+        'margin-top': (scrollPos/3)+"px",
+        'opacity': 1-(scrollPos/800)
+    });
+}
+$(document).ready(function(){
+    $(window).scroll(function() {
+        EasyPeasyParallax();
+    });
+});

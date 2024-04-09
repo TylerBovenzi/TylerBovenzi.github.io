@@ -4036,7 +4036,8 @@ input[type=button].btn-block {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  padding: -0.5rem -1rem;
+  color: rgba(255, 255, 255, 0); /* fully transparent white text */
 }
 .navbar .container,
 .navbar .container-fluid,
@@ -10164,10 +10165,10 @@ img::-moz-selection {
 
 @media (min-width: 992px) {
   #mainNav {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
     border: none;
-    background-color: transparent;
+    background-color: black;
     transition: padding-top 0.3s ease-in-out, padding-bottom 0.3s ease-in-out;
   }
   #mainNav .navbar-brand {
@@ -10181,7 +10182,7 @@ img::-moz-selection {
   #mainNav.navbar-shrink {
     padding-top: 1rem;
     padding-bottom: 1rem;
-    background-color: #353535;
+    background-color: black;
   }
   #mainNav.navbar-shrink .navbar-brand {
     font-size: 1.25em;
@@ -10202,7 +10203,7 @@ header.masthead {
   padding-bottom: 6rem;
   text-align: center;
   color: #ffffff;
-  background-image: url("../assets/img/grey.jpg");
+  background-image: url("../assets/img/zion.jpeg");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
