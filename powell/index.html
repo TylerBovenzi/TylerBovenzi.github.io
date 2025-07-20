@@ -397,6 +397,88 @@
             margin-top: 0;
         }
         
+        .wildlife-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .wildlife-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #00b894;
+        }
+        
+        .wildlife-card h4 {
+            color: #2d3436;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .wildlife-type {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .fish-size {
+            color: #636e72;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .wildlife-description {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #2d3436;
+        }
+        
+        .wildlife-section {
+            background: linear-gradient(135deg, #00cec9, #55a3ff);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .wildlife-section h3 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        
+        .fishing-tips {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .safety-wildlife {
+            background: linear-gradient(135deg, #fd79a8, #fdcb6e);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .safety-wildlife h4 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.1rem;
+        }
+        
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2rem;
@@ -539,6 +621,7 @@
             <div class="nav-tab" onclick="showTab('itinerary')">Daily Schedule</div>
             <div class="nav-tab" onclick="showTab('budget')">Cost Breakdown</div>
             <div class="nav-tab" onclick="showTab('logistics')">Planning & Logistics</div>
+            <div class="nav-tab" onclick="showTab('wildlife')">Fish & Wildlife</div>
         </div>
         
         <div id="overview" class="tab-content active">
@@ -770,6 +853,150 @@
                     <li>Optimal fishing conditions still active from spring</li>
                     <li>Significant cost advantages across all categories</li>
                 </ul>
+            </div>
+        </div>
+        
+        <div id="wildlife" class="tab-content">
+            <div class="card">
+                <h2>Fish & Wildlife at Lake Powell</h2>
+                <p>Lake Powell's diverse ecosystem supports abundant fish populations and fascinating desert wildlife. Understanding what you might encounter enhances both fishing success and wildlife appreciation during your expedition.</p>
+                
+                <div class="wildlife-section">
+                    <h3>Prime Fishing Species</h3>
+                    <p>Lake Powell offers world-class fishing opportunities with species ranging from trophy bass to massive catfish. June conditions are excellent for most species.</p>
+                    
+                    <div class="fishing-tips">
+                        <h4>June Fishing Conditions</h4>
+                        <p><strong>Water Temperature:</strong> 70-75°F - ideal for active feeding<br>
+                        <strong>Best Times:</strong> Early morning (5-8 AM) and evening (6-9 PM)<br>
+                        <strong>Technique:</strong> Focus on structure like submerged rocks and canyon walls</p>
+                    </div>
+                </div>
+                
+                <div class="wildlife-grid">
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Game Fish</span>
+                        <h4>Largemouth Bass</h4>
+                        <div class="fish-size">Average: 1-3 lbs | Trophy: 5+ lbs</div>
+                        <div class="wildlife-description">Most popular sport fish in Lake Powell. Found around rocky structure, points, and submerged vegetation. Very active in June with excellent topwater action during morning and evening hours.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Game Fish</span>
+                        <h4>Smallmouth Bass</h4>
+                        <div class="fish-size">Average: 1-2 lbs | Trophy: 4+ lbs</div>
+                        <div class="wildlife-description">Aggressive fighters found in deeper rocky areas and canyon walls. Peak activity in June as water warms. Known for spectacular jumping when hooked.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Game Fish</span>
+                        <h4>Striped Bass</h4>
+                        <div class="fish-size">Average: 3-8 lbs | Trophy: 15+ lbs</div>
+                        <div class="wildlife-description">Open water predators that school and feed aggressively. Look for bird activity on the surface indicating feeding schools. Can provide fast action when located.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Trophy Fish</span>
+                        <h4>Channel Catfish</h4>
+                        <div class="fish-size">Average: 2-5 lbs | Trophy: 15+ lbs</div>
+                        <div class="wildlife-description">Bottom feeders active at night. Excellent eating fish. Use cut bait or stink baits in deeper areas and creek channels. Some reach massive sizes in Lake Powell.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Sport Fish</span>
+                        <h4>Walleye</h4>
+                        <div class="fish-size">Average: 1-3 lbs | Trophy: 5+ lbs</div>
+                        <div class="wildlife-description">Excellent table fare found in deeper waters. Most active during low light conditions. Use jigs or live bait near bottom structure in 20-40 feet of water.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Panfish</span>
+                        <h4>Bluegill</h4>
+                        <div class="fish-size">Average: 6-8 inches | Large: 10+ inches</div>
+                        <div class="wildlife-description">Perfect for beginners and steady action. Found in shallow coves and protected areas. Use small baits and light tackle for best success.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Invasive</span>
+                        <h4>Common Carp</h4>
+                        <div class="fish-size">Average: 5-15 lbs | Large: 20+ lbs</div>
+                        <div class="wildlife-description">Large, powerful fish found throughout the lake. While not native, they provide strong fights and are sometimes targeted by specialized anglers.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Rare</span>
+                        <h4>Northern Pike</h4>
+                        <div class="fish-size">Average: 3-8 lbs | Trophy: 15+ lbs</div>
+                        <div class="wildlife-description">Toothy predators found in certain areas of the lake. Excellent fighters but require careful handling. Use wire leaders and focus on weed lines and structure.</div>
+                    </div>
+                </div>
+                
+                <div class="wildlife-section">
+                    <h3>Desert Wildlife & Birds</h3>
+                    <p>The surrounding desert ecosystem and lake environment support diverse wildlife that you may encounter during hikes and shoreline exploration.</p>
+                </div>
+                
+                <div class="wildlife-grid">
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Birds</span>
+                        <h4>Great Blue Heron</h4>
+                        <div class="wildlife-description">Large wading birds commonly seen fishing in shallow areas. Excellent indicators of good fishing spots. Often spotted standing motionless near shore.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Birds</span>
+                        <h4>Double-crested Cormorant</h4>
+                        <div class="wildlife-description">Diving birds that pursue fish underwater. When you see them actively diving, there are likely schools of fish in the area - great fishing intelligence.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Birds</span>
+                        <h4>Osprey</h4>
+                        <div class="wildlife-description">Fish-eating raptors with spectacular diving abilities. Nesting platforms installed around the lake support healthy populations. Amazing to watch fish.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Mammals</span>
+                        <h4>Desert Bighorn Sheep</h4>
+                        <div class="wildlife-description">Occasionally seen on steep canyon walls and rocky slopes. Rare sightings but possible during quiet morning or evening hours near water sources.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Mammals</span>
+                        <h4>Mule Deer</h4>
+                        <div class="wildlife-description">Common in canyon areas and come to water during dawn and dusk. May be seen along shorelines or hiking trails, especially near freshwater seeps.</div>
+                    </div>
+                    
+                    <div class="wildlife-card">
+                        <span class="wildlife-type">Reptiles</span>
+                        <h4>Lizards (Various Species)</h4>
+                        <div class="wildlife-description">Numerous lizard species including collared, fence, and whiptail lizards. Commonly seen sunning on rocks. Harmless and interesting to observe.</div>
+                    </div>
+                </div>
+                
+                <div class="safety-wildlife">
+                    <h4>Wildlife Safety & Considerations</h4>
+                    <p><strong>Rattlesnakes:</strong> Present in desert areas. Wear proper footwear when hiking and watch where you step.<br>
+                    <strong>Scorpions:</strong> Check shoes and clothing before putting them on. Shake out sleeping bags.<br>
+                    <strong>Food Storage:</strong> Secure all food to prevent wildlife encounters, especially ravens and ringtails.<br>
+                    <strong>Respectful Distance:</strong> Observe all wildlife from a distance and never attempt to feed animals.</p>
+                </div>
+                
+                <h3>Fishing Equipment Recommendations</h3>
+                <div class="checklist">
+                    <div class="checklist-item">
+                        <strong>Bass Fishing:</strong> Medium-action spinning rods, 10-15 lb line, topwater lures, plastic worms
+                    </div>
+                    <div class="checklist-item">
+                        <strong>Striper Fishing:</strong> Heavy action rods, 20+ lb line, large spoons, live bait rigs
+                    </div>
+                    <div class="checklist-item">
+                        <strong>Catfish:</strong> Heavy rods, 20+ lb line, circle hooks, cut bait, stink baits
+                    </div>
+                    <div class="checklist-item">
+                        <strong>General:</strong> Net, tackle box, pliers, fillet knife, cooler with ice
+                    </div>
+                </div>
             </div>
         </div>
         
